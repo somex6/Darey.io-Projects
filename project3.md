@@ -35,7 +35,7 @@ The following commands are used to configure the ubuntu server:
 -	**Install the dotenv module**: $ npm install dotenv
 -	**Editing the index.js file with this command**: vim index.js
 -	 entering the following codes:
-
+```
       const express = require('express');
       require('dotenv').config();
   
@@ -56,12 +56,13 @@ The following commands are used to configure the ubuntu server:
       app.listen(port, () => {
       console.log(`Server runninchange g on port ${port}`)
       });
-      
+  ```
+  
   **Save and quit the editor by typing :wq**
   
 -	**Start the server**: $ node index.js 
 -	Configuring the security group of the EC2 instance to be able to listen to port 5000
--	Opening up the browser to access the server’s public IP followed by port 5000: [title](https://<Public IP or Public DNS>:5000)
+-	Opening up the browser to access the server’s public IP followed by port 5000: `(https://<Public IP or Public DNS>:5000)`
 
 ## STEP 6: Creating Routes
   
@@ -74,8 +75,9 @@ Setting up routes that will be able to handle these three actions for the Todo a
 -	**Change directory to routes**: $ cd routes
 -	**Create a file called api.js**: $ touch api.js
 -	**Open the file with the command**: $ vim api.js
-  	Entering the following code:
-    
+-       Entering the following code:
+
+```
     const express = require ('express');
     const router = express.Router();
 
@@ -92,21 +94,22 @@ Setting up routes that will be able to handle these three actions for the Todo a
     })
 
     module.exports = router;
-    
+ ```
     Save and quit by typing :wq
 
 ## STEP 7: Creating a schema and a Model
 
--	Install a Nodejs package called mongoose which makes working with mongodb easier. Change directory back to Todo folder by entering the command: $ cd.. and install Mongoose: $   npm install mongoose
+-	Install a Nodejs package called mongoose which makes working with mongodb easier. Change directory back to Todo folder by entering the command: $ cd .. and then install               Mongoose: $ npm install mongoose
 -	**Create a new folder called models**: $ mkdir models
 -	**Change directory to models**: $ cd models
 -	**Create a new file called todo.js**: $ touch todo.js
 -	Open the todo.js file with vim todo.js command and enter the following code
-
+```
     const mongoose = require('mongoose');
     const Schema = mongoose.Schema;
 
     //create schema for todo
+    
     const TodoSchema = new Schema({
     action: {
     type: String,
@@ -115,12 +118,14 @@ Setting up routes that will be able to handle these three actions for the Todo a
     })
 
     //create model for todo
+    
     const Todo = mongoose.model('todo', TodoSchema);
 
     module.exports = Todo;
+ ```
 
 -	**Updating the routes file in the routes directory in order to work with the new model created and entering the code**:
-
+```
     const express = require ('express');
     const router = express.Router();
     const Todo = require('../models/todo');
@@ -128,6 +133,7 @@ Setting up routes that will be able to handle these three actions for the Todo a
     router.get('/todos', (req, res, next) => {
 
     //this will return all the data, exposing only the id and action field to the client
+    
     Todo.find({}, 'action')
     .then(data => res.json(data))
     .catch(next)
@@ -152,65 +158,72 @@ Setting up routes that will be able to handle these three actions for the Todo a
     })
 
     module.exports = router;
+ ```
 
 ## STEP 8: Working with MongoDB database
  
   Working with mlab which provides MongoDB database as a service solution(DBaaS). The following steps are taken to set up:
   
-- Creating an account with the mlab
+-      Creating an account with the mlab
 -	Creating a MongoDB database and collection inside mLab
 -	Creating a .env file in Todo directory: $ touch .env
--	Open the file: vi .env
--	Add the connection string to access the database in it(the username, password and network-address are replaced with the credentials used in creating the mongodb database),:      [title](DB = 'mongodb+srv://<username>:<password>@<network-address>/<dbname>?retryWrites=true&w=majority')
+-	Open the file: $ vi .env
+-	Add the connection string to access the database in it(the username, password and network-address are replaced with the credentials used in creating the mongodb database):     
+       ` DB = 'mongodb+srv://<username>:<password>@<network-address>/<dbname>?retryWrites=true&w=majority'`
 -	updating the index.js file to reflect the use of .env so that Node.js can connect to the database by opening it with this command: vim index.js, deleting the content by typing :%d and pressing the enter key, type I to enter insert mode  and entering the following code:
 
+```
     const express = require('express');
-	  const bodyParser = require('body-parser');
-  	const mongoose = require('mongoose');
+    const bodyParser = require('body-parser');
+    const mongoose = require('mongoose');
     const routes = require('./routes/api');
-  	const path = require('path');
-  	require('dotenv').config();
+    const path = require('path');
+    require('dotenv').config();
 	
-  	const app = express();
+    const app = express();
 
-  	const port = process.env.PORT || 5000;
+    const port = process.env.PORT || 5000;
 
-  	//connect to the database
-  	mongoose.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
-   	.then(() => console.log(`Database connected successfully`))
-  	.catch(err => console.log(err));
+    //connect to the database
+    
+    mongoose.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
+    
+    .then(() => console.log(`Database connected successfully`))
+    .catch(err => console.log(err));
 	
-  	//since mongoose promise is depreciated, we overide it with node's promise
-  	mongoose.Promise = global.Promise;
+     //since mongoose promise is depreciated, we overide it with node's promise
+     mongoose.Promise = global.Promise;
 
-  	app.use((req, res, next) => {
-  	res.header("Access-Control-Allow-Origin", "\*");
-  	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  	next();
-  	});
+     app.use((req, res, next) => {
+     res.header("Access-Control-Allow-Origin", "\*");
+     
+     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+     next();
+     });
 	
-  	app.use(bodyParser.json());
+     app.use(bodyParser.json());
 
-  	app.use('/api', routes);
+     app.use('/api', routes);
 
-  	app.use((err, req, res, next) => {
-	  console.log(err);
-  	next();
-    });
+     app.use((err, req, res, next) => {
+     console.log(err);
+     next();
+     });
  
-  	app.listen(port, () => {
-  	console.log(`Server running on port ${port}`)
-    });
-  
-  Save and quit and starting the server at the Todo directory
+     app.listen(port, () => {
+     console.log(`Server running on port ${port}`)
+     });
+```
+
+- Save and quit and starting the server at the Todo directory
 - **Starting the server**: $ node index.js
 
-## STEP9: Testing the Backend code with Postman
+## STEP 9: Testing the Backend code with Postman
 
 To test the code in the backend:
--	Open  a postman and create a POST request to the api  [title](http://<PublicIP-or-PublicDNS>:5000/api/todos)
--	Create a GET request to the API on [title](http://<PublicIP-or-PublicDNS>:5000/api/todos)	which retrieves all existing records from the Todo application 
--	Create a DELETE request to the API on [title](http://<PublicIP-or-PublicDNS>:5000/api/todos/<id of the post>)
+-	Open  a postman and create a POST request to the api  `http://<PublicIP-or-PublicDNS>:5000/api/todos`
+-	Create a GET request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos` which retrieves all existing records from the Todo application 
+-	Create a DELETE request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos/<id of the post>`
 
 ## STEP 10: Creating the Frontend 
 
@@ -221,17 +234,18 @@ To create the frontend with react, the following steps are taken:
 -	Install concurrently: $ npm install concurrently –save-dev
 -	Install nodemon :$ npm install nodemon --save-dev
 -	Replacing the script tag in the package.json in the Todo directory with the following code:
-
+ ```
     "scripts": {
     "start": "node index.js",
     "start-watch": "nodemon index.js",
     "dev": "concurrently \"npm run start-watch\" \"cd client && npm start\""
     },
-**configuring proxy in package.json in the client directory**
+  ```
+- **configuring proxy in package.json in the client directory**
 - $ cd client
 - $ vi package.json
 - Adding the following: "proxy": "http://localhost:5000" 
--Starting the server in the Todo directly by entering the following command: $ npm run dev
+- Starting the server in the Todo directly by entering the following command: $ npm run dev
 - Configuring the security group of my EC2 instance to be able to listen to TCP port 3000
 
 ## STEP 11: Creating my React Components
@@ -241,8 +255,8 @@ To create the frontend with react, the following steps are taken:
 - $ cd components
 - Creating the following files: $ touch Input.js ListTodo.js Todo.js
 - Opening the Input.js file: $ vi Input.js
--  **entering the following code**:
-
+-  Entering the following code:
+```
     import React, { Component } from 'react';
     import axios from 'axios';
 
@@ -288,13 +302,15 @@ To create the frontend with react, the following steps are taken:
   }
 
   export default Input
-  
+```
+
 - Moving to the client folder to install axios using the command:  $ cd ..
 - Install axios: $ npm install axios
 - Going back to the components folder using: cd src/components
 - Opening ListTodo.js: $ vi ListTodo.js
-- entering the following code:
+- Entering the following code:
 
+```
     import React from 'react';
 
     const ListTodo = ({ todos, deleteTodo }) => {
@@ -321,9 +337,10 @@ To create the frontend with react, the following steps are taken:
     }
 
     export default ListTodo
+ ```
     
- - **open Todo.js file and enter the following code**:
- 
+ - **Open Todo.js file in the components folder and enter the following code**:
+ ```
     import React, {Component} from 'react';
     import axios from 'axios';
 
@@ -379,9 +396,10 @@ To create the frontend with react, the following steps are taken:
     }
 
     export default Todo;
+```
 
-**Editing the App.js file in the src folder by deleting the contents and entering the following code **:
-
+- **Editing the App.js file in the src folder by deleting the contents and entering the following code **:
+```
   import React from 'react';
 
   import Todo from './components/Todo';
@@ -396,118 +414,117 @@ To create the frontend with react, the following steps are taken:
   }
 
   export default App;
-  
- **Editing the App.css file in the src directory by deleting the contents and entering the following code**:
+ ```
  
+ - **Editing the App.css file in the src directory by deleting the contents and entering the following code**:
+```
 .App {
-text-align: center;
-font-size: calc(10px + 2vmin);
-width: 60%;
-margin-left: auto;
-margin-right: auto;
+        text-align: center;
+        font-size: calc(10px + 2vmin);
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
 }
 
 input {
-height: 40px;
-width: 50%;
-border: none;
-border-bottom: 2px #101113 solid;
-background: none;
-font-size: 1.5rem;
-color: #787a80;
+        height: 40px;
+        width: 50%;
+        border: none;
+        border-bottom: 2px #101113 solid;
+        background: none;
+        font-size: 1.5rem;
+        color: #787a80;
 }
 
 input:focus {
-outline: none;
+        outline: none;
 }
 
 button {
-width: 25%;
-height: 45px;
-border: none;
-margin-left: 10px;
-font-size: 25px;
-background: #101113;
-border-radius: 5px;
-color: #787a80;
-cursor: pointer;
+        width: 25%;
+        height: 45px;
+        border: none;
+        margin-left: 10px;
+        font-size: 25px;
+        background: #101113;
+        border-radius: 5px;
+        color: #787a80;
+        cursor: pointer;
 }
 
 button:focus {
-outline: none;
+        outline: none;
 }
 
 ul {
-list-style: none;
-text-align: left;
-padding: 15px;
-background: #171a1f;
-border-radius: 5px;
+        list-style: none;
+        text-align: left;
+        padding: 15px;
+        background: #171a1f;
+        border-radius: 5px;
 }
 
 li {
-padding: 15px;
-font-size: 1.5rem;
-margin-bottom: 15px;
-background: #282c34;
-border-radius: 5px;
-overflow-wrap: break-word;
-cursor: pointer;
+        padding: 15px;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        background: #282c34;
+        border-radius: 5px;
+        overflow-wrap: break-word;
+        cursor: pointer;
 }
 
 @media only screen and (min-width: 300px) {
-.App {
-width: 80%;
-}
+        .App {
+                width: 80%;
+        }
 
-input {
-width: 100%
-}
+        input {
+                width: 100%
+        }
 
-button {
-width: 100%;
-margin-top: 15px;
-margin-left: 0;
-}
+        button {
+          width: 100%;
+          margin-top: 15px;
+          margin-left: 0;
+        }
 }
 
 @media only screen and (min-width: 640px) {
-.App {
-width: 60%;
-}
+        .App {
+                width: 60%;
+        }
 
-input {
-width: 50%;
-}
+        input {
+                width: 50%;
+        }
 
-button {
-width: 30%;
-margin-left: 10px;
-margin-top: 0;
+        button {
+                width: 30%;
+                margin-left: 10px;
+                margin-top: 0;
+        }
 }
-}
-
-**Editing the index.css file in the src folder by deleting the contents and entering the following codes**:
-
+```
+- **Editing the index.css file in the src folder by deleting the contents and entering the following codes**:
+```
 body {
-margin: 0;
-padding: 0;
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-sans-serif;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
-box-sizing: border-box;
-background-color: #282c34;
-color: #787a80;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+                "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        box-sizing: border-box;
+        background-color: #282c34;
+        color: #787a80;
 }
 
 code {
-font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-monospace;
+        font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
-
-## Final STEP: Launching the Application
+```
+## Final STEP: Launching the Todo Application
 
 To launch the application:
 - move to the Todo directory: $ cd ../..
