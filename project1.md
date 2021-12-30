@@ -34,7 +34,7 @@ The following commands are used to configure the ubuntu server:
 -	**Create a new file called index.js**: $ touch index.js
 -	**Install the dotenv module**: $ npm install dotenv
 -	**Editing the index.js file with this command**: vim index.js
-- entering the following codes:
+-	 entering the following codes:
 
       const express = require('express');
       require('dotenv').config();
@@ -57,7 +57,7 @@ The following commands are used to configure the ubuntu server:
       console.log(`Server runninchange g on port ${port}`)
       });
       
-  Save and quit the editor by typing :wq
+  **Save and quit the editor by typing :wq**
   
 -	**Start the server**: $ node index.js 
 -	Configuring the security group of the EC2 instance to be able to listen to port 5000
@@ -74,7 +74,7 @@ Setting up routes that will be able to handle these three actions for the Todo a
 -	**Change directory to routes**: $ cd routes
 -	**Create a file called api.js**: $ touch api.js
 -	**Open the file with the command**: $ vim api.js
-  Entering the following code:
+  	Entering the following code:
     
     const express = require ('express');
     const router = express.Router();
