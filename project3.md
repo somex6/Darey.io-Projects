@@ -13,6 +13,8 @@ After a successful launch of the EC2 instance(ubuntu server), I connected to the
 The following commands are used to configure the ubuntu server:
 -	**Update ubuntu** : $ sudo apt update 
 -	**Upgrade ubuntu**: $ sudo apt upgrade
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/sudo%20apt%20update%20and%20upgrade.png)
 -	**To get the location of Node.js software from Ubuntu repositories** : 
   $ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash –
 
@@ -27,12 +29,16 @@ The following commands are used to configure the ubuntu server:
 -	**Change current directory to work in Todo directory**: $ cd Todo
 -	**Initializing my project which will create package.json with this command**: $ npm init
 -	Following the prompt and accept to write out the package.json file
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/npm%20init.png)
  
 ## STEP 5: Installing ExpressJs
 
 -	**Install ExpressJS with the command**: $ npm install express
 -	**Create a new file called index.js**: $ touch index.js
 -	**Install the dotenv module**: $ npm install dotenv
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Express%20install.png)
 -	**Editing the index.js file with this command**: vim index.js
 -	 entering the following codes:
 ```
@@ -62,6 +68,9 @@ The following commands are used to configure the ubuntu server:
   
 -	**Start the server**: $ node index.js 
 -	Configuring the security group of the EC2 instance to be able to listen to port 5000
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/port%205000%20only.png)
+
 -	Opening up the browser to access the server’s public IP followed by port 5000: `(https://<Public IP or Public DNS>:5000)`
 
 ## STEP 6: Creating Routes
@@ -103,6 +112,9 @@ Setting up routes that will be able to handle these three actions for the Todo a
 -	**Create a new folder called models**: $ mkdir models
 -	**Change directory to models**: $ cd models
 -	**Create a new file called todo.js**: $ touch todo.js
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/install%20moongoose.png)
+
 -	Open the todo.js file with vim todo.js command and enter the following code
 ```
     const mongoose = require('mongoose');
@@ -170,6 +182,9 @@ Setting up routes that will be able to handle these three actions for the Todo a
 -	Open the file: $ vi .env
 -	Add the connection string to access the database in it(the username, password and network-address are replaced with the credentials used in creating the mongodb database):     
        ` DB = 'mongodb+srv://<username>:<password>@<network-address>/<dbname>?retryWrites=true&w=majority'`
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/how%20to%20access%20your%20db%20connection.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Todo%20db%20created.png)
+
 -	updating the index.js file to reflect the use of .env so that Node.js can connect to the database by opening it with this command: vim index.js, deleting the content by typing :%d and pressing the enter key, type I to enter insert mode  and entering the following code:
 
 ```
@@ -216,23 +231,38 @@ Setting up routes that will be able to handle these three actions for the Todo a
 ```
 
 - Save and quit and starting the server at the Todo directory
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Mongodb.png)
+
 - **Starting the server**: $ node index.js
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/server%20%40port%205000.png)
 
 ## STEP 9: Testing the Backend code with Postman
 
 To test the code in the backend:
 -	Open  a postman and create a POST request to the api  `http://<PublicIP-or-PublicDNS>:5000/api/todos`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Post%20request.png)
+
+
 -	Create a GET request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos` which retrieves all existing records from the Todo application 
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Get%20request.png)
 -	Create a DELETE request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos/<id of the post>`
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Delete%20request.png)
 
 ## STEP 10: Creating the Frontend 
 
 To create the frontend with react, the following steps are taken:
 -	Run the command to scaffold the Todo application in the root directory: $ npx create-react-app client
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Create%20react%20app.png)
 
 **Installing some dependencies**
 -	Install concurrently: $ npm install concurrently –save-dev
 -	Install nodemon :$ npm install nodemon --save-dev
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/installing%20of%20nodemon.png)
+
 -	Replacing the script tag in the package.json in the Todo directory with the following code:
  ```
     "scripts": {
@@ -246,7 +276,12 @@ To create the frontend with react, the following steps are taken:
 - $ vi package.json
 - Adding the following: "proxy": "http://localhost:5000" 
 - Starting the server in the Todo directly by entering the following command: $ npm run dev
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/node%20run%20dev.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/react%20server%20running.png)
+
 - Configuring the security group of my EC2 instance to be able to listen to TCP port 3000
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/port%205000.png)
 
 ## STEP 11: Creating my React Components
 - $ cd client
@@ -306,6 +341,9 @@ To create the frontend with react, the following steps are taken:
 
 - Moving to the client folder to install axios using the command:  $ cd ..
 - Install axios: $ npm install axios
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/install%20axios.png)
+
 - Going back to the components folder using: cd src/components
 - Opening ListTodo.js: $ vi ListTodo.js
 - Entering the following code:
@@ -529,3 +567,6 @@ code {
 To launch the application:
 - move to the Todo directory: $ cd ../..
 - run the server: npm run dev
+- Testing on the browser with my publis IP address
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Todo%20app.png)
