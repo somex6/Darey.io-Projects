@@ -21,7 +21,7 @@ After a successful connection, next is configuring the EC2 machine to be able to
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/lamp-images/installing%20apache2.png)
 -	To verify that apache2 is running as a Service in my OS: `$ sudo systemctl status apache2`
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/lamp-images/Apache2%20running%20perfectly.png)
- Apache2 is perfectly installed
+ **Apache2 is perfectly installed**
 
 - Configuring the security group of my EC2 instance by adding a rule in the inbound section inorder to be able to listen to port 80 and also make it to allow access to any IP when it is accessed by a web browser
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/lamp-images/adding%20http%20rule.png)
@@ -30,7 +30,7 @@ After a successful connection, next is configuring the EC2 machine to be able to
 
 - Testing how the Apache HTTP server can respond to requests from the Internet; Pasting my public address in the browser and tapping enter:
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/lamp-images/Apache2%20working%20on%20browser.png)
-This shows that my web server is now correctly installed and accessible through my firewall.
+**This shows that my web server is now correctly installed and accessible through my firewall.**
 
 ## STEP 4: Installing MySQL
 
