@@ -11,36 +11,37 @@ After a successful launch of the EC2 instance(ubuntu server), I connected to the
 ## STEP 2: Server Configuration
 
 The following commands are used to configure the ubuntu server:
--	**Update ubuntu** : $ sudo apt update 
--	**Upgrade ubuntu**: $ sudo apt upgrade
+-	Update ubuntu : `$ sudo apt update`
+-	Upgrade ubuntu: `$ sudo apt upgrade`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/sudo%20apt%20update%20and%20upgrade.png)
--	**To get the location of Node.js software from Ubuntu repositories** : 
-  $ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash –
+
+-	To get the location of Node.js software from Ubuntu repositories : `$ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash –`
 
 ## STEP 3: Installing Nodejs on the server
 
--	**Install Nodejs with the command**: $ sudo apt-get install -y nodejs
+-	Install Nodejs with the command: $ sudo apt-get install -y nodejs
 
 ## STEP 4: Application code setup
 
--	**Create a new directory**: $ mkdir Todo
--	**To verify that the directory is created**: $ ls
--	**Change current directory to work in Todo directory**: $ cd Todo
--	**Initializing my project which will create package.json with this command**: $ npm init
+-	Create a new directory: `$ mkdir Todo`
+-	To verify that the directory is created: `$ ls`
+-	Change current directory to work in Todo directory: `$ cd Todo`
+-	Initializing my project which will create package.json with this command: `$ npm init`
 -	Following the prompt and accept to write out the package.json file
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/npm%20init.png)
  
 ## STEP 5: Installing ExpressJs
 
--	**Install ExpressJS with the command**: $ npm install express
--	**Create a new file called index.js**: $ touch index.js
--	**Install the dotenv module**: $ npm install dotenv
+-	Install ExpressJS with the command: `$ npm install express`
+-	Create a new file called index.js: `$ touch index.js`
+-	Install the dotenv module: `$ npm install dotenv`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Express%20install.png)
--	**Editing the index.js file with this command**: vim index.js
--	 entering the following codes:
+
+-	Editing the index.js file with this command: `vim index.js`
+-	 **entering the following codes:**
 ```
       const express = require('express');
       require('dotenv').config();
@@ -66,7 +67,7 @@ The following commands are used to configure the ubuntu server:
   
   **Save and quit the editor by typing :wq**
   
--	**Start the server**: $ node index.js 
+-	Start the server: `$ node index.js`
 -	Configuring the security group of the EC2 instance to be able to listen to port 5000
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/port%205000%20only.png)
@@ -80,11 +81,11 @@ Setting up routes that will be able to handle these three actions for the Todo a
 2.	Display list of all tasks
 3.	Delete a completed task
   
--	**Creating a folder for our routes**: $ mkdir routes
--	**Change directory to routes**: $ cd routes
--	**Create a file called api.js**: $ touch api.js
--	**Open the file with the command**: $ vim api.js
--       Entering the following code:
+-	Creating a folder for our routes**: $ mkdir routes
+-	Change directory to routes: `$ cd routes`
+-	Create a file called api.js: `$ touch api.js`
+-	Open the file with the command: `$ vim api.js`
+-       **Entering the following code:**
 
 ```
     const express = require ('express');
@@ -104,18 +105,17 @@ Setting up routes that will be able to handle these three actions for the Todo a
 
     module.exports = router;
  ```
-    Save and quit by typing :wq
 
 ## STEP 7: Creating a schema and a Model
 
--	Install a Nodejs package called mongoose which makes working with mongodb easier. Change directory back to Todo folder by entering the command: $ cd .. and then install               Mongoose: $ npm install mongoose
--	**Create a new folder called models**: $ mkdir models
--	**Change directory to models**: $ cd models
--	**Create a new file called todo.js**: $ touch todo.js
+-	Installing a Nodejs package called mongoose which makes working with mongodb easier. Changing directory back to Todo folder by entering the command: `$ cd .. ` and then 	 installing Mongoose: `$ npm install mongoose`
+-	Create a new folder called models: `$ mkdir models`
+-	Change directory to models: `$ cd models`
+-	Create a new file called todo.js: `$ touch todo.js`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/install%20moongoose.png)
 
--	Open the todo.js file with vim todo.js command and enter the following code
+-	**Open the todo.js file with vim todo.js command and enter the following code**
 ```
     const mongoose = require('mongoose');
     const Schema = mongoose.Schema;
@@ -178,14 +178,14 @@ Setting up routes that will be able to handle these three actions for the Todo a
   
 -      Creating an account with the mlab
 -	Creating a MongoDB database and collection inside mLab
--	Creating a .env file in Todo directory: $ touch .env
--	Open the file: $ vi .env
--	Add the connection string to access the database in it(the username, password and network-address are replaced with the credentials used in creating the mongodb database):     
+-	Creating a .env file in Todo directory: `$ touch .env`
+-	Opening the file: `$ vi .env`
+-	Adding the connection string to access the database in it(the username, password and network-address are replaced with the credentials used in creating the mongodb database):     
        ` DB = 'mongodb+srv://<username>:<password>@<network-address>/<dbname>?retryWrites=true&w=majority'`
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/how%20to%20access%20your%20db%20connection.png)
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Todo%20db%20created.png)
 
--	updating the index.js file to reflect the use of .env so that Node.js can connect to the database by opening it with this command: vim index.js, deleting the content by typing :%d and pressing the enter key, type I to enter insert mode  and entering the following code:
+-	updating the index.js file to reflect the use of .env so that Node.js can connect to the database by opening it with this command: vim index.js, deleting the content by 	typing `:%d` and pressing the enter key, tap I to enter insert mode  and entering the following code:
 
 ```
     const express = require('express');
@@ -234,7 +234,7 @@ Setting up routes that will be able to handle these three actions for the Todo a
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Mongodb.png)
 
-- **Starting the server**: $ node index.js
+- Starting the server: `$ node index.js`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/server%20%40port%205000.png)
 
@@ -248,22 +248,23 @@ To test the code in the backend:
 
 -	Create a GET request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos` which retrieves all existing records from the Todo application 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Get%20request.png)
+
 -	Create a DELETE request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos/<id of the post>`
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Delete%20request.png)
 
 ## STEP 10: Creating the Frontend 
 
 To create the frontend with react, the following steps are taken:
--	Run the command to scaffold the Todo application in the root directory: $ npx create-react-app client
+-	Run the command to scaffold the Todo application in the root directory: `$ npx create-react-app client`
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Create%20react%20app.png)
 
 **Installing some dependencies**
--	Install concurrently: $ npm install concurrently –save-dev
--	Install nodemon :$ npm install nodemon --save-dev
+-	Installing concurrently: `$ npm install concurrently –save-dev`
+-	Installing nodemon: `$ npm install nodemon --save-dev`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/installing%20of%20nodemon.png)
 
--	Replacing the script tag in the package.json in the Todo directory with the following code:
+-	**Replacing the script tag in the package.json in the Todo directory with the following code:**
  ```
     "scripts": {
     "start": "node index.js",
@@ -272,10 +273,10 @@ To create the frontend with react, the following steps are taken:
     },
   ```
 - **configuring proxy in package.json in the client directory**
-- $ cd client
-- $ vi package.json
-- Adding the following: "proxy": "http://localhost:5000" 
-- Starting the server in the Todo directly by entering the following command: $ npm run dev
+- `$ cd client`
+- `$ vi package.json`
+- Adding the following: `"proxy": "http://localhost:5000"`
+- Starting the server in the Todo directly by entering the following command: `$ npm run dev`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/node%20run%20dev.png)
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/react%20server%20running.png)
@@ -284,13 +285,13 @@ To create the frontend with react, the following steps are taken:
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/port%205000.png)
 
 ## STEP 11: Creating my React Components
-- $ cd client
-- $ cd src
-- $ mkdir components
-- $ cd components
-- Creating the following files: $ touch Input.js ListTodo.js Todo.js
-- Opening the Input.js file: $ vi Input.js
--  Entering the following code:
+- `$ cd client`
+- `$ cd src`
+- `$ mkdir components`
+- `$ cd components`
+- Creating the following files: `$ touch Input.js ListTodo.js Todo.js`
+- Opening the Input.js file: `$ vi Input.js`
+-  **Entering the following code:**
 ```
     import React, { Component } from 'react';
     import axios from 'axios';
@@ -339,14 +340,14 @@ To create the frontend with react, the following steps are taken:
   export default Input
 ```
 
-- Moving to the client folder to install axios using the command:  $ cd ..
-- Install axios: $ npm install axios
+- Moving to the client folder to install axios using the command:  `$ cd .. `
+- Install axios: `$ npm install axios`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/install%20axios.png)
 
-- Going back to the components folder using: cd src/components
-- Opening ListTodo.js: $ vi ListTodo.js
-- Entering the following code:
+- Going back to the components folder using: `cd src/components`
+- Opening ListTodo.js: `$ vi ListTodo.js`
+- **Entering the following code:**
 
 ```
     import React from 'react';
@@ -565,8 +566,8 @@ code {
 ## Final STEP: Launching the Todo Application
 
 To launch the application:
-- move to the Todo directory: $ cd ../..
-- run the server: npm run dev
+- move to the Todo directory: `$ cd ../..``
+- run the server: `npm run dev`
 - Testing on the browser with my publis IP address
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Todo%20app.png)
