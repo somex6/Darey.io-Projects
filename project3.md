@@ -81,11 +81,11 @@ Setting up routes that will be able to handle these three actions for the Todo a
 2.	Display list of all tasks
 3.	Delete a completed task
   
--	Creating a folder for our routes**: $ mkdir routes
+-	Creating a folder for our routes: $ mkdir routes
 -	Change directory to routes: `$ cd routes`
 -	Create a file called api.js: `$ touch api.js`
 -	Open the file with the command: `$ vim api.js`
--       **Entering the following code:**
+-	**entering the following code:**
 
 ```
     const express = require ('express');
@@ -175,8 +175,7 @@ Setting up routes that will be able to handle these three actions for the Todo a
 ## STEP 8: Working with MongoDB database
  
   Working with mlab which provides MongoDB database as a service solution(DBaaS). The following steps are taken to set up:
-  
--      Creating an account with the mlab
+  - Creating an account with mlab
 -	Creating a MongoDB database and collection inside mLab
 -	Creating a .env file in Todo directory: `$ touch .env`
 -	Opening the file: `$ vi .env`
@@ -241,21 +240,21 @@ Setting up routes that will be able to handle these three actions for the Todo a
 ## STEP 9: Testing the Backend code with Postman
 
 To test the code in the backend:
--	Open  a postman and create a POST request to the api  `http://<PublicIP-or-PublicDNS>:5000/api/todos`
+-	Opening a postman and creating a POST request to the api  `http://<PublicIP-or-PublicDNS>:5000/api/todos`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Post%20request.png)
 
 
--	Create a GET request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos` which retrieves all existing records from the Todo application 
+-	Creating a GET request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos` which retrieves all existing records from the Todo application 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Get%20request.png)
 
--	Create a DELETE request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos/<id of the post>`
+-	Creating a DELETE request to the API on `http://<PublicIP-or-PublicDNS>:5000/api/todos/<id of the post>`
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Delete%20request.png)
 
 ## STEP 10: Creating the Frontend 
 
 To create the frontend with react, the following steps are taken:
--	Run the command to scaffold the Todo application in the root directory: `$ npx create-react-app client`
+-	Running the command to scaffold the Todo application in the root directory: `$ npx create-react-app client`
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Create%20react%20app.png)
 
 **Installing some dependencies**
@@ -437,7 +436,8 @@ To create the frontend with react, the following steps are taken:
     export default Todo;
 ```
 
-- **Editing the App.js file in the src folder by deleting the contents and entering the following code **:
+- **Editing the App.js file in the src folder by deleting the contents and entering the following code** :
+
 ```
   import React from 'react';
 
@@ -566,7 +566,7 @@ code {
 ## Final STEP: Launching the Todo Application
 
 To launch the application:
-- move to the Todo directory: `$ cd ../..``
+- move to the Todo directory: `$ cd ../..`
 - run the server: `npm run dev`
 - Testing on the browser with my publis IP address
 
