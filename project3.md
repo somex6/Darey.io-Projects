@@ -20,13 +20,13 @@ The following commands are used to configure the ubuntu server:
 
 ## STEP 3: Installing Nodejs on the server
 
--	Install Nodejs with the command: $ sudo apt-get install -y nodejs
+-	Installing Nodejs with the command: $ sudo apt-get install -y nodejs
 
 ## STEP 4: Application code setup
 
--	Create a new directory: `$ mkdir Todo`
+-	Creating a new directory: `$ mkdir Todo`
 -	To verify that the directory is created: `$ ls`
--	Change current directory to work in Todo directory: `$ cd Todo`
+-	Changing the current directory to work in Todo directory: `$ cd Todo`
 -	Initializing my project which will create package.json with this command: `$ npm init`
 -	Following the prompt and accept to write out the package.json file
 
@@ -34,14 +34,14 @@ The following commands are used to configure the ubuntu server:
  
 ## STEP 5: Installing ExpressJs
 
--	Install ExpressJS with the command: `$ npm install express`
--	Create a new file called index.js: `$ touch index.js`
--	Install the dotenv module: `$ npm install dotenv`
+-	Installing ExpressJS with the command: `$ npm install express`
+-	Creating a new file called index.js: `$ touch index.js`
+-	Installing the dotenv module: `$ npm install dotenv`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Express%20install.png)
 
 -	Editing the index.js file with this command: `vim index.js`
--	 **entering the following codes:**
+-	 **Entering the following codes:**
 ```
       const express = require('express');
       require('dotenv').config();
@@ -67,7 +67,7 @@ The following commands are used to configure the ubuntu server:
   
   **Save and quit the editor by typing :wq**
   
--	Start the server: `$ node index.js`
+-	Starting the server: `$ node index.js`
 -	Configuring the security group of the EC2 instance to be able to listen to port 5000
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/port%205000%20only.png)
@@ -82,10 +82,10 @@ Setting up routes that will be able to handle these three actions for the Todo a
 3.	Delete a completed task
   
 -	Creating a folder for our routes: $ mkdir routes
--	Change directory to routes: `$ cd routes`
--	Create a file called api.js: `$ touch api.js`
--	Open the file with the command: `$ vim api.js`
--	**entering the following code:**
+-	Changing directory to routes: `$ cd routes`
+-	Creating a file called api.js: `$ touch api.js`
+-	Opening the file with the command: `$ vim api.js`
+-	**Entering the following code:**
 
 ```
     const express = require ('express');
@@ -109,9 +109,9 @@ Setting up routes that will be able to handle these three actions for the Todo a
 ## STEP 7: Creating a schema and a Model
 
 -	Installing a Nodejs package called mongoose which makes working with mongodb easier. Changing directory back to Todo folder by entering the command: `$ cd .. ` and then 	 installing Mongoose: `$ npm install mongoose`
--	Create a new folder called models: `$ mkdir models`
--	Change directory to models: `$ cd models`
--	Create a new file called todo.js: `$ touch todo.js`
+-	Creating a new folder called models: `$ mkdir models`
+-	Changing the directory to models: `$ cd models`
+-	Creating a new file called todo.js: `$ touch todo.js`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/install%20moongoose.png)
 
@@ -568,6 +568,6 @@ code {
 To launch the application:
 - move to the Todo directory: `$ cd ../..`
 - run the server: `npm run dev`
-- Testing on the browser with my publis IP address
+- Testing on the browser with my public IP address
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project1/Todo%20app.png)
