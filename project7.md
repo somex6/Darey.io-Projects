@@ -96,7 +96,8 @@ I connected to the EC2 instance with mobaxterm via ssh connection and ran the fo
 -	`$ sudo mkfs –t xfs /dev/filedata-vg/lv-opt`
 -	`$ sudo mkfs –t xfs /dev/filedata-vg/lv-apps`
 -	`$ sudo mkfs –t xfs /dev/filedata-vg/lv-logs`
-![https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/21-formatting%20the%20disks.png]
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/21-formatting%20the%20disks.png)
 
 14.	Creating a directory where the 3 logical volumes will be mounted in */mnt* directory:
 -	`$ sudo mkdir /mnt/opt`
@@ -156,19 +157,22 @@ I connected to the EC2 instance with mobaxterm via ssh connection and ran the fo
 -	`$ sudo chmod -R 777 /mnt/logs`
 -	`$ sudo chmod –R 777 /mnt/opt`
 -	Restarting the nfs service: `$ sudo systemctl restart nfs-server.service`
+
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/35-chmod%20and%20restart.png)
 
 7.	Configuring access to NFS server for clients within the same subnet(the subnet cidr of my webservers is 172.31.80.0/20):
--	Configuring the NFS export file `$ sudo vi /etc/exports` and entering the following configuration:
+-	Opening the NFS export file `$ sudo vi /etc/exports`
+-	Entering the following configuration:
 
 ```
-	/mnt/apps <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
-	/mnt/logs <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
-	/mnt/opt <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
+	/mnt/apps 172.31.80.0/20(rw,sync,no_all_squash,no_root_squash)
+	/mnt/logs 172.31.80.0/20(rw,sync,no_all_squash,no_root_squash)
+	/mnt/opt 172.31.80.0/20(rw,sync,no_all_squash,no_root_squash)
 ```
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/36-export%20config.png)
 
 -	Exporting the configuration to make the mounts directory available for NFS clients to mount: `$ sudo exportfs -arv`
+
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/37-export%20mounts.png)
 
 -	Checking the port used by NFS: `$ rpcinfo –p | grep nfs`
@@ -176,12 +180,13 @@ I connected to the EC2 instance with mobaxterm via ssh connection and ran the fo
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/38-to%20check%20ports%20used%20by%20nfs.png)
 
 -	Opening the port in the security group of the NFS server including TCP 111, UDP 111, UDP 2049:
+
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/39-configuring%20security%20group%20for%20the%20nfs%20server.png)
 
 ## Step 3: Setting Up And Configuring The Database Server
 I launched another EC2 instance(Ubuntu 20.04) from AWS to be used as database server. Then I connected to it from my terminal via ssh connection and performed the following commands in setting up mysql database:
 -	Updating and upgrading the server:
--	
+	
 `$ sudo apt update`
 
 `$ sudo apt upgrade`
@@ -191,6 +196,7 @@ I launched another EC2 instance(Ubuntu 20.04) from AWS to be used as database se
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/64-upgrading%20database%20server-2.png)
 
 -	Installing mysql server: `$ sudo apt install mysql-server`
+
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/67-installing%20mysql-server.png)
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/68-installing%20mysql-server-2.png)
 
@@ -203,12 +209,15 @@ mysql> GRANT ALL PRIVILEGES ON ‘tooling’.* TO ‘webaccess’@’172.31.80.0
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/69-creating%20a%20mysql%20user.png)
 
 -	Adding a rule in the database security group to listen to TCP port 3306 and only allow access from webservers’ subnet cidr:
+
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/75-adding%203306%20port%20in%20database.png)
 
 -	Editing the mysqld.cnf file `$ sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf` and changing the bind-address value from ‘127.0.0.1’ to ‘0.0.0.0’:
+
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/70-configuring%20mysqld.conf.png)
 
 -	Restarting the mysql service:`$ sudo systemctl restart mysql`
+
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/71-restarting%20mysql%20service.png)
 
 ## Step 4: Configuring The Webservers
@@ -257,8 +266,8 @@ I connected to the remaining 3 EC2 instances launched, which is to be used as we
 -	Verifying that NFS is successfully mounted:`$ df -h`
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/41-to%20verify%20that%20nfs%20export%20is%20mounted.png)
 
--	Updating the fstab configuration to ensure that the mount persist:`$ sudo vi /etc/fstab`
--	Entering the following configuration:
+-	Editing the fstab configuration to ensure that the mount persist:`$ sudo vi /etc/fstab`
+-	And entering the following configuration:
 `172.31.84.250:/mnt/apps /var/www nfs defaults 0 0`
 
 **For webserver A**
@@ -271,6 +280,7 @@ I connected to the remaining 3 EC2 instances launched, which is to be used as we
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/updating%20the%20fstab%20for%20the%20webserver%20C.png)
 
 -	Installing Apache:`$ sudo yum install httpd -y`
+
 **For webserver A**
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/43-installing%20apache.png)
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/44-installing%20apache-2.png)
@@ -411,7 +421,7 @@ I connected to the remaining 3 EC2 instances launched, which is to be used as we
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/56-installing%20git.png)
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/57-installing%20git-2.png)
 
--	Forking the Darey’s repo into my github account and cloning it from the terminal:`$ git clone https://github.com/somex6/tooling.git`
+-	Forked the Darey’s repo into my github account and cloning it from the terminal:`$ git clone https://github.com/somex6/tooling.git`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/58-cloning%20the%20tooling%20repo.png)
 
@@ -419,7 +429,7 @@ I connected to the remaining 3 EC2 instances launched, which is to be used as we
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/59-copying%20html%20folder%20to%20html%20folder%20in%20www.png)
 
--	Adding a rule in the security group of the webservers to able to listen to port 80:
+-	Adding a rule in the security group of the webservers to be able to listen to port 80:
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/61-adding%20port%2080%20for%20the%20webservers.png)
 
 -	Disabling SELInux :`$ sudo setenforce 0`
@@ -433,7 +443,7 @@ I connected to the remaining 3 EC2 instances launched, which is to be used as we
 -	Updating the website configuration to connect to the database: `$ sudo vi /var/www/html/functions.php`
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/76-updating%20the%20functions.php.png)
 
-- Installing mysql client in the webserver:`$ sudo yum install mysql`
+- Installing mysql client on the webserver:`$ sudo yum install mysql`
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/72-installing%20mysql%20in%20webservers.png)
 
 -	Executing the tooling-db.sql script with the database private IP address to load data in tooling database from the webserver:`$ mysql -h 172.31.27.76 -u webaccess -p tooling < tooling-db.sql`
@@ -459,7 +469,7 @@ Testing the DevOps Tooling website in my browser:
 
 **For webserver B:** http://44.203.88.57/index.php
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/testing%20the%20site%20on%20wbsB.png)
-![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/testing%20the%20site%20on%20wbsB.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/testing%20the%20site%20on%20wbsB-2.png)
 
 **For webserver C:** http://54.211.180.27/index.php
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project7/testing%20the%20site%20on%20wbsC.png)
