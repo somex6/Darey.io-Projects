@@ -4,10 +4,10 @@ In this project, the web application architecture in [project 8](https://github.
 
 The following outlines the steps I took in setting up this project:
 
-# STEP 0: Launching Of EC2 Instance
+## STEP 0: Launching Of EC2 Instance
 I launched an EC2 Instance(Ubuntu server 20.04) that will be used as Jenkins Server. I connected to the server on my terminal through ssh connection.
 
-# STEP 1: Installing And Configuring The Jenkins Server
+## STEP 1: Installing And Configuring The Jenkins Server
 -	Updating and upgrading the server:
 
 `$ sudo apt update`
@@ -68,7 +68,7 @@ I launched an EC2 Instance(Ubuntu server 20.04) that will be used as Jenkins Ser
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project9/jenkins%20home%20page.png)
 
-## STEP 3: Configuring Jenkins to retrieve source codes from GitHub using Webhooks
+## STEP 3: Configuring Jenkins To Retrieve Source Codes From GitHub Using Webhooks
 
 -	Enabling webhooks in my Github account which will trigger a build task, that will retrieve codes from Github and store it locally on Jenkins server. And this is done by going to the Github settings of the tooling repository and clicking on webhooks and inputing the Jenkins public Ip address as the payload URL and saving the settings:
 
