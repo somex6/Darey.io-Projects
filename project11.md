@@ -176,7 +176,7 @@ A VS code application is setup that will help in better coding experience and de
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project11/28-git%20commit.png)
 
--	Pushing the code which will create a push request **git push upstream**
+-	Pushing the code which will create a push request "**git push upstream**"
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project11/29-git%20push%20upstream.png)
 
@@ -194,7 +194,7 @@ A VS code application is setup that will help in better coding experience and de
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project11/32-build%20triggered-2.png)
 
--	Heading back to my VSCode terminal and checkout to the main branch:
+-	Heading back to my VSCode terminal to checkout to the main branch:
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project11/33-checkout%20to%20main.png)
 
