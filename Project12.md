@@ -1,7 +1,7 @@
 # ANSIBLE REFACTORING AND STATIC ASSIGNMENT (IMPORTS AND ROLES)
 ## INTRODUCTION
 
-In continuation of project 11, the ansible code in my ansible-config-mgt repository is refactored into making use of the import functionality– which allows us to effectively re-use previously created playbooks in a new playbook, and assigning task in the playbook with role functionality.
+In continuation of [project 11](https://github.com/somex6/Darey.io-Projects/blob/main/project11.md), the ansible code in my ansible-config-mgt repository is refactored into making use of the import functionality– which allows us to effectively re-use previously created playbooks in a new playbook, and assigning task in the playbook with role functionality.
 
 The following outlines the steps taken:
 
