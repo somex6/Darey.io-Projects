@@ -1,1 +1,1 @@
-## This repo contains screenshot of project 13
+## This repo contains screenshots of my DevOps project
