@@ -111,4 +111,71 @@ Creating the group ‘sonar’:
 `$ sudo groupadd sonar`
 Adding a user with control over /opt/sonarqube directory:
 `$ sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar `
-sudo chown sonar:sonar /opt/sonarqube -R
+`$ sudo chown sonar:sonar /opt/sonarqube -R`
+- Openinig SonarQube configuration file: `$ sudo vim /opt/sonarqube/conf/sonar.properties`
+- Entering the following configurations under Database section:
+```
+sonar.jdbc.username=sonar
+sonar.jdbc.password=sonar
+sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
+```
+- Editing the sonar script file and set RUN_AS_USER: `$ sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh`
+- in order to start SonarQube, the following is done: 
+- Switching to 'sonar' user: `$ sudo su sonar`
+- Moving to the script directory: `cd /opt/sonarqube/bin/linux-x86-64/`
+- Running the script to start SonarQube: `./sonar.sh start`
+- Checking whether SonarQube is in running state: `./sonar.sh status`
+- To check SonarQube logs: `tail /opt/sonarqube/logs/sonar.log`
+- To Configure SonarQube as a service, the SonarQube server is stopped first: `cd /opt/sonarqube/bin/linux-x86-64/`
+- Stopping the server: `./sonar.sh stop`
+- Exiting to sudo user: `exit`
+- Creating a systemd service file for SonarQube to run as System Startup: `$ sudo nano /etc/systemd/system/sonar.service`
+- Entering the following configurations:
+ ```
+ [Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+
+User=sonar
+Group=sonar
+Restart=always
+
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target
+
+```
+- Starting the SonarQube service and enabling it:
+ `$ sudo systemctl start sonar`
+ `$ sudo systemctl enable sonar`
+ `$ sudo systemctl status sonar`
+- Accessing SonarQube through the browser by entering the SonarQube server’s IP address followed by port 9000: `http://<server's IP adress>:9000`
+
+STEP 6: Configuring Jenkins For SonarQube Quality Gate
+- Generating authentication token in the SonarQube server by navigating from 'My Account' to security
+- Configuring Quality Gate Jenkins Webhook in SonarQube by navigating from 'Administration' to 'Configuration' to 'webhook' and 'create' and then specifying the URL as this– http://<Jenkins ip address>/sonarqube-webhook/
+- Installing SonarScanner plugin in jenkins:
+- Navigating to 'Configure System' in Jenkins to add SonarQube server details with the generated token:
+- Setting the SonarQube scanner by navigating from 'manage jenkins' to 'Global Tool Configuration':
+- Updating the Jenkinsfile to include SonarQube Scanning and Quality Gate:
+- Configuring  
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
