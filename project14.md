@@ -7,6 +7,8 @@ The following are the steps taken to achieve this:
 
 ## STEP 0: Setting Up Servers
 
+I launched 3 EC2 Instances, one for Jenkins server, another for MySQL database(RedHat) and another is used for SonarQube Server
+
 ## STEP 1:  Configuring Ansible For Jenkins Deployment
 
 In order to run ansible commands from Jenkins UI, the following outlines the steps taken:
@@ -80,91 +82,228 @@ Since the goal here is to deploy applications directory from Artifactory rather 
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/57-configuring%20jfrog%20on%20jenkins.png)
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/57-configuring%20jfrog%20on%20jenkins-2.png)
-- Forking the repository into my Github account:
-https://github.com/darey-devops/php-todo.git
-On database server, installing mysql: `$ sudo yum install mysql-server`
-Creating a database and a remote user:
+
+- Forking the repository into my Github account: `https://github.com/darey-devops/php-todo.git`
+- On database server, installing mysql: `$ sudo yum install mysql-server`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/59-installing%20mysql-server%20on%20the%20db.png)
+
+- Creating a database and a remote user:
+```
 Create database homestead;
 CREATE USER 'homestead'@'<Jenkins-ip-address>' IDENTIFIED BY 'sePret^i';
 GRANT ALL PRIVILEGES ON * . * TO 'homestead'@'<Jenkins-ip-address>';
 
-On the Jenkins server, installing PHP, its dependencies
-Installing Composer tool:
-Updating the .env.sample with database server ip address
-On VSCode, Creating Jenkinsfile for the php-todo repository on the main branch
-Entering the following codes:
-The first stage performs a clean-up which always deletes the previous workspace before running a new one
-The second stage connects to the php-todo repository
-The third stage performs a shell scripting which renames .env.sample file to .env, then composer is used by PHP to install all the dependent libraries used by the application and then php artisan uses the .env to setup the required database objects
-Pushing the changes:
-Creating php-todo pipeline job from the Blue Ocean UI
-Running the pipeline job
-After a successful run of the pipeline job, confirming on the database server by running SHOW TABLES command to see the tables being created
-STEP 4: Structuring The Jenkinsfile
-Including unit test stage in the Jenkinsfile:
-Adding Code Quality stage with phploc tool and will save the output in build/logs/phploc.csv:
-Adding the plot code coverage report stage:
-Adding the package artifacts stage which archives the application code
-Uploading the artifacts to the Artifactory repository in this stage:
-Deploying the application to the dev environment by launching Ansible pipeline job(ansible-config-mgt)
- 
-STEP 5: Setting Up The SonarQube Server
-To ensure that only code with the required code coverage and other quality standards gets to make it through to the dev environment, SonarQube is configured:
- On the SonarQube server, performing the following command on the terminal which makes the session changes which does not persist beyond the current session terminal to ensure optimal performance of the tool
-sudo sysctl -w vm.max_map_count=262144
-sudo sysctl -w fs.file-max=65536
-ulimit -n 65536
-ulimit -u 4096
-To make the change permanent, editing limits.conf file:`$ sudo vi /etc/security/limits.conf`
-Entering the following configuration:
+```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/60-creating%20a%20user.png)
+
+- Starting the mysqld server:
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/60-starting%20the%20mysqld%20service.png)
+
+- Configuring the bind_address in the my.cnf file:
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/setting%20the%20my.cnf%20file%20for%20mysql.png)
+
+- Opening port 3306 in the database security group
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/60-opening%20port%203306%20in%20the%20db.png)
+
+- On the Jenkins server, installing PHP, its dependencies
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/48-installing%20php%20and%20its%20dependencies.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/48-installing%20php%20and%20its%20dependencies-2.png)
+
+- Installing Composer tool:
+
+**Downloading the Installer:** `$ php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/49-downloading%20composer%20installer.png)
+
+**Verifying the installer:** `$ php -r "if (hash_file('sha384', 'composer-setup.php') === '906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"`
+
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/50-verifying%20the%20installer.png)
+
+**Running the Installer:** `$ php composer-setup.php
+`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/51-running%20the%20composer%20installer.png)
+
+**Removing the Installer:** `$ php -r "unlink('composer-setup.php');"`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/52-removing%20the%20installer.png)
+
+- Updating the .env.sample with database server ip address
+
+![]()
+
+- On VSCode, Creating Jenkinsfile for the php-todo repository on the main branch
+- Entering the following codes:
+
+![]()
+
+ The first stage performs a clean-up which always deletes the previous workspace before running a new one
+ The second stage connects to the php-todo repository
+ The third stage performs a shell scripting which renames .env.sample file to .env, then composer is used by PHP to install all the dependent libraries used by the application and then php artisan uses the .env to setup the required database objects
+- Pushing the changes to the main branch
+
+![]()
+
+- Creating php-todo pipeline job from the Blue Ocean UI
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/creating%20new%20multipipline%20job.png)
+
+- Running the pipeline job
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/61-running%20the%20first%203%20stages.png)
+
+- After a successful run of the pipeline job, confirming on the database server by running SHOW TABLES command to see the tables being created
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/62-confirming%20that%20tables%20are%20created%20in%20the%20db%20server.png)
+
+## STEP 4: Structuring The Jenkinsfile
+
+- Including unit test stage in the Jenkinsfile:
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/63-executing%20unit%20test%20stage.png)
+
+- Adding Code Quality stage with phploc tool and will save the output in build/logs/phploc.csv:
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/64-executing%20code%20analysis%20stage.png)
+
+- Adding the plot code coverage report stage:
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/65-executing%20plot%20stage.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/65-executing%20plot%20stage%20-2.png)
+
+- Adding the package artifacts stage which archives the application code
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/66-executing%20package%20artifact%20stage.png)
+
+- Uploading the artifacts to the Artifactory repository in this stage:
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/67-uploading%20artifact%20stage.png)
+
+- Deploying the application to the dev environment by launching Ansible pipeline job(ansible-config-mgt)
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/68-deployment%20stage.png)
+
+## STEP 5: Setting Up The SonarQube Server
+
+To ensure that only code with the required code coverage and other quality standards gets to make it through to the dev environment, SonarQube server is setup and  configured:
+
+- On the SonarQube server, performing the following command on the terminal which makes the session changes persist beyond the current session terminal to ensure optimal performance of the tool
+
+```
+$ sudo sysctl -w vm.max_map_count=262144
+$ sudo sysctl -w fs.file-max=65536
+$ ulimit -n 65536
+$ ulimit -u 4096
+
+```
+![]()
+
+- To make the changes permanent, editing limits.conf file:`$ sudo vi /etc/security/limits.conf`
+- Entering the following configuration:
+
+```
 sonarqube   -   nofile   65536
 sonarqube   -   nproc    4096
 
-Updating and upgrading the server: 
-`$ sudo apt-get update`
-`$ sudo apt-get upgrade`
-Installing the wget and unzip packages: 
-`$ sudo apt-get install wget unzip -y`
+```
+![]()
 
-Installing OpenJDK and Java Runtime Environment(JRE) 11
+- Updating and upgrading the server: 
+
+`$ sudo apt-get update`
+
+`$ sudo apt-get upgrade`
+
+![]()
+
+- Installing the wget and unzip packages: `$ sudo apt-get install wget unzip -y`
+
+![]()
+
+- Installing OpenJDK and Java Runtime Environment(JRE) 11:
+
 ` $ sudo apt-get install openjdk-11-jdk -y`
+
 ` $ sudo apt-get install openjdk-11-jre -y`
-To install postgresql database, adding the postgresql repo to the repo list:
-`$ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'`
-Downloading software key:
-`$ wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -`
-Installing postgresql database server:
-`$ sudo apt-get -y install postgresql postgresql-contrib`
-Starting postgresql server:
-`$ sudo systemctl start postgresql`
-Enabling it to start automatically:
-`$ sudo systemctl enable postgresql`
-Changing the password for the default postgres user:
-`$ sudo passwd postgres`
-Switching to the postgres user:
-`$ su – postgres`
-Creating a new user ‘sonar’:
-`$ createuser sonar`
-Activating postgresql shell:`$ psql`
-Setting password for the newly created user for the SonarQube databases:
-`ALTER USER sonar WITH ENCRYPTED password 'sonar';`
-Creating a new database for Postgresql database:
-`CREATE DATABASE sonarqube OWNER sonar;`
-Granting all privileges to the user sonar on sonarqube database:
-`grant all privileges on DATABASE sonarqube to sonar;`
-Exiting from the shell
-Switching back to sudo user:
-To install SonarQube software, navigating to the /tmp folder to temporarily  download the installation files
-`$ cd /tmp && sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.3.zip`
-Unzipping the archive setup to the /opt directory:
-`$ sudo unzip sonarqube-7.9.3.zip -d /opt`
-Moving the extracted setup to /opt/sonarqube directory:
-`$ sudo mv /opt/sonarqube-7.9.3 /opt/sonarqube`
-Creating the group ‘sonar’:
-`$ sudo groupadd sonar`
-Adding a user with control over /opt/sonarqube directory:
+
+![]()
+
+- To install postgresql database, adding the postgresql repo to the repo list: `$ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'`
+
+![]()
+
+- Downloading Postgresql software key: `$ wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -`
+
+![]()
+
+- Installing postgresql database server: `$ sudo apt-get -y install postgresql postgresql-contrib`
+
+![]()
+
+- Starting postgresql server: `$ sudo systemctl start postgresql`
+
+![]()
+
+- Enabling it to start automatically: `$ sudo systemctl enable postgresql`
+
+![]()
+
+- Changing the password for the default postgres user: `$ sudo passwd postgres`
+
+![]()
+
+- Switching to the postgres user: `$ su – postgres`
+
+![]()
+
+- Creating a new user ‘sonar’: `$ createuser sonar`
+
+![]()
+
+- Activating postgresql shell:`$ psql`
+
+![]()
+
+- Setting password for the newly created user for the SonarQube databases: `ALTER USER sonar WITH ENCRYPTED password 'sonar';`
+- Creating a new database for Postgresql database: `CREATE DATABASE sonarqube OWNER sonar;`
+- Granting all privileges to the user sonar on sonarqube database: `grant all privileges on DATABASE sonarqube to sonar;`
+- Exiting from the shell
+
+![]()
+
+- Switching back to sudo user:
+
+
+- To install SonarQube software, navigating to the '/tmp' folder to temporarily download the installation files: `$ cd /tmp && sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.9.3.zip`
+
+![]()
+
+- Unzipping the archive setup to the /opt directory: `$ sudo unzip sonarqube-7.9.3.zip -d /opt`
+
+![]()
+
+- Moving the extracted setup to /opt/sonarqube directory: `$ sudo mv /opt/sonarqube-7.9.3 /opt/sonarqube`
+
+![]()
+
+- Creating the group ‘sonar’: `$ sudo groupadd sonar`
+
+![]()
+
+- Adding a user with control over /opt/sonarqube directory: 
+
 `$ sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar `
+
 `$ sudo chown sonar:sonar /opt/sonarqube -R`
+
+![]()
+
 - Openinig SonarQube configuration file: `$ sudo vim /opt/sonarqube/conf/sonar.properties`
 - Entering the following configurations under Database section:
 ```
@@ -172,17 +311,52 @@ sonar.jdbc.username=sonar
 sonar.jdbc.password=sonar
 sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
 ```
+![]()
+
 - Editing the sonar script file and set RUN_AS_USER: `$ sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh`
-- in order to start SonarQube, the following is done: 
+
+![]()
+
+- In order to start SonarQube, the following is done: 
+
+![]()
+
 - Switching to 'sonar' user: `$ sudo su sonar`
+
+![]()
+
 - Moving to the script directory: `cd /opt/sonarqube/bin/linux-x86-64/`
+
+![]()
+
 - Running the script to start SonarQube: `./sonar.sh start`
+
+![]()
+
 - Checking whether SonarQube is in running state: `./sonar.sh status`
+
+![]()
+
 - To check SonarQube logs: `tail /opt/sonarqube/logs/sonar.log`
+
+![]()
+
 - To Configure SonarQube as a service, the SonarQube server is stopped first: `cd /opt/sonarqube/bin/linux-x86-64/`
+
+![]()
+
 - Stopping the server: `./sonar.sh stop`
+
+![]()
+
 - Exiting to sudo user: `exit`
+
+![]()
+
 - Creating a systemd service file for SonarQube to run as System Startup: `$ sudo nano /etc/systemd/system/sonar.service`
+
+![]()
+
 - Entering the following configurations:
  ```
  [Unit]
@@ -206,20 +380,52 @@ LimitNPROC=4096
 WantedBy=multi-user.target
 
 ```
+![]()
+
 - Starting the SonarQube service and enabling it:
- `$ sudo systemctl start sonar`
- `$ sudo systemctl enable sonar`
- `$ sudo systemctl status sonar`
+
+`$ sudo systemctl start sonar`
+
+`$ sudo systemctl enable sonar`
+
+`$ sudo systemctl status sonar`
+
+![]()
+
 - Accessing SonarQube through the browser by entering the SonarQube server’s IP address followed by port 9000: `http://<server's_IP_adress>:9000`
 
-STEP 6: Configuring Jenkins For SonarQube Quality Gate
+![]()
+
+## STEP 6: Configuring Jenkins For SonarQube Quality Gate
+
 - Generating authentication token in the SonarQube server by navigating from 'My Account' to security
+
+![]()
+
 - Configuring Quality Gate Jenkins Webhook in SonarQube by navigating from 'Administration' to 'Configuration' to 'webhook' and 'create' and then specifying the URL as this: `http://<Jenkins ip address>/sonarqube-webhook/`
+
+![]()
+
 - Installing SonarScanner plugin in jenkins:
+
+![]()
+
 - Navigating to 'Configure System' in Jenkins to add SonarQube server details with the generated token:
+
+![]()
+
 - Setting the SonarQube scanner by navigating from 'manage jenkins' to 'Global Tool Configuration':
+
+![]()
+
 - Updating the Jenkinsfile to include SonarQube Scanning and Quality Gate:
+
+![]()
+
 - Configuring the sonar-scanner.properties file in which SonarQube will require to function during pipeline execution: `$ cd /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/conf/`
+
+![]()
+
 - Editing and entering the following configuration: `$ sudo vi sonar-scanner.properties`
 ```
 sonar.host.url=http://<SonarQube-Server-IP-address>:9000
@@ -231,16 +437,26 @@ sonar.php.coverage.reportPaths=build/logs/clover.xml
 sonar.php.tests.reportPath=build/logs/junit.xml
 
 ```
+![]()
+
 - To list the content in the scanner tool **sonar-scanner** to see what we are calling in the pipeline script: `$ cd /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin` `$ ls -latr`
 
- STEP 6: Running The Pipeline Job
- - After uploading the code from VSCode to github and clicking 'scan the repository now' will activate the pipeline job.
+![]()
+
+## STEP 7: Running The Pipeline Job
+
+- After uploading the code from VSCode to github and clicking 'scan the repository now' will activate the pipeline job.
 
 **End-to-End Pipeline Overview**
 
+![]()
+
 **Results from the SonarQube Server**
- 
+
+![]() 
+
 **The complete Jenkinsfile code**
+
 -  To ensure that only pipeline job that is run on either 'main' or 'develop' or 'hotfix' or 'release' branch gets to make it to the deploy stage, the Jenkinsfile is updated and a timeout step is also added to wait for SonarQube to complete analysis and successfully finish the pipeline only when code quality is acceptable.:
  
 STEP 7: Running the Pipeline Job with 2 Jenkins agents/slaves(Nodes)
