@@ -631,6 +631,10 @@ sonar.php.tests.reportPath=build/logs/junit.xml
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/the%20reason%20the%20pipeline%20job%20break.png)
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/the%20reason%20the%20build%20failed.png)
 
+**After a restart**
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/restarting%20the%20sonaQube%20stage%20completes%20the%20pipeline%20job.png)
+
 **Results from the SonarQube Server**
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/prject14/sonarqube%20results%20from%20the%20build.png)
