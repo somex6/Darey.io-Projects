@@ -342,10 +342,10 @@ The following outlines the steps taken:
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project15/wordpress%20dns%20record.png)
 
 ## STEP 14: Result
-- Entering the url https://www.tooling.somdev.ga will route traffic from the application load balancer to the nginx and then to the server for tooling site through the internal ALB:
+- Entering the url https://www.wordpress.somdev.ga will route traffic from the application load balancer to the nginx and then to the server for wordpress site through the internal ALB:
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project15/wordpress%20result.png)
 
-- Entering the url https://www.wordpress.somdev.ga will route traffic from the application load balancer to the nginx and then to the internal ALB which forwards the traffic to the server for wordpress site:
+- Entering the url https://www.tooling.somdev.ga will route traffic from the application load balancer to the nginx and then to the internal ALB which forwards the traffic to the server for tooling site:
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project15/result%20for%20tooling.png)
