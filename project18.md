@@ -4,7 +4,7 @@ In continuation to [Project 17](https://github.com/somex6/Darey.io-Projects/blob
 
 The following outlines detailed step taken to achieve this:
 
-## STEP 2: Configuring A Backend On The S3 Bucket
+## STEP 1: Configuring A Backend On The S3 Bucket
 By default the Terraform state is stored locally, to store it remotely on AWS using S3 bucket as the backend and also making use of DynamoDB as the State Locking the following setup is done:
 - Creating a file called **Backend.tf** and entering the following code:
 ```
