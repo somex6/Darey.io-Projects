@@ -1,6 +1,6 @@
 # AUTOMATING INFRASTRUCTURE WITH IAC USING TERRAFORM PART 4 – TERRAFORM CLOUD
 ## INTRODUCTION
-In this project, instead of running the Terraform codes in project 18 from a command line, rather it is being executed from Terraform cloud console. The AMI is built different with packer while Ansible is used to configure the infrastructure after its been provisioned by Terraform.
+In this project, instead of running the Terraform codes in project 18 from a command line, rather it is being executed from Terraform cloud console. The AMI is built differently with packer while Ansible is used to configure the infrastructure after its been provisioned by Terraform.
 
 The following outlines the steps:
 
@@ -75,6 +75,10 @@ The following outlines the steps:
 
 - Updating the RDS endpoints, Database name, password and username in the **setup-db.yml** file for both the tooling and wordpress role
 
+**EFS Details**
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/efs%20created.png)
+
 **For Tooling**
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/updating%20setup-db%20for%20tooling.png)
@@ -141,20 +145,48 @@ The following outlines the steps:
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/creating%20release%20tags-2.png)
 
 - Clicking **Publish release** to create the release
-- To create a Terraform module for my private module registry, navigating to the Registry header in Terraform Cloud and selecting **Publish private module** from the upper right corner.
+- To create a Terraform module for my private module registry in the [terraform registry site]
+(), navigating to the Registry header in Terraform Cloud and selecting **Publish private module** from the upper right corner.
 - Selecting the GitHub(Custom) VCS provider that I configured and choosing the name of the module repository **terraform-aws-s3-webapp** and clicking the **Publish module** button.
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/signing%20in%20to%20terraform%20registry.png)
-![]()
-- To create a configuration that uses the module; forking the repo [learn private module](https://github.com/hashicorp/learn-private-module-root/) which will access the module I created and Terraform will use it to create infrastructure.
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/publishing%20a%20module.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/creating%20second%20workspace.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/creating%20second%20workspace-2.png)
+
+- To create a configuration that uses the module; forking the repo [learn private module](https://github.com/hashicorp/learn-private-module-root/) which will access the module published and Terraform will use it to create the infrastructure.
 
 **main.tf**
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/main.tf.png)
+
 **variables.tf**
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/variables.tf.png)
+
 **outputs.tf**
-- Creating a new workspace and selecting the **learn-private-module-root** repo 
-- Clicking on **Configure Variable** to set my AWS credentials as environment variable and also set the values of these variables: region, prefix and name which is specified in the root module configuration
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/outputs.tf.png)
+
+- Creating a new workspace and selecting the **learn-private-module-root** repository
+- 
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/20-creating%20workspace.png)
+
+- Clicking on **Configure Variable** to set my AWS credentials as environment variable and also set the values of these variables;**region, prefix and name**, which is specified in the root module configuration
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/creating%20variables.png)
+
 - Deploying the infrastructure by clicking on **start new plan**
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/22-running%20the%20terraform%20apply.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/22-running%20the%20terraform%20apply-2.png)
 
 **Testing the Infrastructure**
 
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/testing%20the%20deployment.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/testing%20the%20deployment-2.png)
+
 - Destroying the Infrastructure
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/23-terraform%20destroy.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/23-terrafrorm%20destroy-2.png)
