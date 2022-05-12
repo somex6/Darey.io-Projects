@@ -169,7 +169,7 @@ The following outlines the steps:
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/outputs.tf.png)
 
 - Creating a new workspace and selecting the **learn-private-module-root** repository
-- 
+
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project19/20-creating%20workspace.png)
 
 - Clicking on **Configure Variable** to set my AWS credentials as environment variable and also set the values of these variables;**region, prefix and name**, which is specified in the root module configuration
