@@ -1,20 +1,20 @@
 #  MIGRATION TO THE CLOUD WITH CONTAINERIZATION - DOCKER
 ## INTRODUCTION
 
-In this project, the frontend and the backend(MySQL) of **tooling** application is built and containerized using **DOCKER** of which its image is pushed to Docker registry. And further in the project, the **php-todo** application is also built into a container and pushed the AWS Elastic Container Registry using a CI/CD tool known as Jenkins and **Docker Compose** is also implemented.
+In this project, the frontend and the backend(MySQL) of **tooling** application is built and containerized using **DOCKER** of which its image is pushed to Docker registry. And further in the project, the **php-todo** application is also built into a container and pushed into the AWS Elastic Container Registry using a CI/CD tool known as Jenkins and **Docker Compose** is also implemented.
 
 The following outlines the steps:
 
-## STEP 1: Creating MySQL container For Tooling App Backend
+## STEP 1: Creating MySQL Container For Tooling App Backend
 - Creating a custom network with a subnet dedicated for both MySQL and the Tooling application so that they connect: ` $ docker network create --subnet=172.18.0.0/24 tooling_app_network`
 - Creating an environment variable to store the root password: `$ export MYSQL_PW=password1234`
 - Pulling the MySQL image and running the container: `$ docker run --network tooling_app_network -h mysqlserverhost --name=mysql-server -e MYSQL_ROOT_PASSWORD=$MYSQL_PW  -d mysql/mysql-server:latest`
-- To verify the container is running:`$ docker ps -a`
+- To verify the container is created:`$ docker ps -a`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/4.png)
 
 - Because it's not a good practice to connect to MySQL server remotely using the root user. Creating a file **create_user.sql** and adding the following code in order to create a user:
-`$ CREATE USER 'somex'@'%' IDENTIFIED BY 'password123'; GRANT ALL PRIVILEGES ON * . * TO 'somex'@'%';`
+`CREATE USER 'somex'@'%' IDENTIFIED BY 'password123'; GRANT ALL PRIVILEGES ON * . * TO 'somex'@'%';`
 - Running the script to create the new user:` $ docker exec -i mysql-server mysql -uroot -p$MYSQL_PW < create_user.sql`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/5.png)
@@ -25,11 +25,11 @@ The following outlines the steps:
 
 ## STEP 2: Preparing The Database Schema
 
-- Clone the Tooling-app repository: ` $ git clone https://github.com/darey-devops/tooling.git`
+- Cloning the Tooling-app repository: ` $ git clone https://github.com/darey-devops/tooling.git`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/7.png)
 
-- Exporting the location of the SQL file:` $ export tooling_db_schema=/tooling_db_schema.sql `
+- Exporting the location of the SQL file that contains data for setting up the MySQL database:` $ export tooling_db_schema=~/tooling_db_schema.sql `
 - Using the SQL script to create the database and prepare the schema:` $ docker exec -i mysql-server mysql -uroot -p$MYSQL_PW < $tooling_db_schema`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/8.png)
@@ -37,8 +37,6 @@ The following outlines the steps:
 ## STEP 3: Running The Tooling App
 
 - From the tooling app directory where the Dockerfile is, running the following command to build the docker image: `$ docker build -t tooling:0.0.1 .`
-
-![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/10.png)
 
 **Dockerfile**
 ```
@@ -63,6 +61,7 @@ ENV MYSQL_DBNAME=toolingdb
 
 CMD ["start-apache"]
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/10.png)
 
 - Running the container: ` $ docker run --network tooling_app_network -p 8085:80 -it tooling:0.0.1 `
 
@@ -126,7 +125,7 @@ ENTRYPOINT php artisan serve --host 0.0.0.0 --port 5001
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/p21.png)
 
-- Logging in from the commandline and changing the name of the php-todo image and giving a tag
+- Logging in from the commandline and changing the name of the php-todo image and giving it a tag
 - Running the following command to push the php-todo app image to my Docker repository
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/p22.png)
@@ -325,3 +324,7 @@ volumes:
   db:
 ```
 - Running the command to start the containers: `$ docker-compose -f tooling.yaml up -d`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/docker%20compose.png)
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project20/app%20running%20at%20port%205000.png)
