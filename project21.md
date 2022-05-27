@@ -773,9 +773,15 @@ done
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/30.png)
 
 - Distributing the files to thier respective servers using scp and for loop:
-```
 
-```
+**For Master nodes**
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/31.png)
+
+**For Worker nodes**
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/32.png)
+
 ## STEP 8: Preparing The ETCD Database For Encryption At Rest
  Kubernetes uses etcd (A distributed key value store) to store variety of data which includes the cluster state, application configurations, and secrets but since the data in it is stored as plain text, therefore the etcd is encrypted as follows,
  - Generating encryption key and encoding it using base64:`ETCD_ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)`
@@ -795,7 +801,12 @@ resources:
       - identity: {}
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/33.png)
+
 - Sending the encryption-config.yaml file to the master nodes using scp and a for loop
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/34.png)
+
 - Bootstrapping etcd cluster using **tmux** to work with multiple terminal sessions simultaneously. Opening 3 panes and ssh into the 3 master nodes and setting the **synchronize-panes on**
 
 **For Master node 1**
@@ -808,7 +819,8 @@ ssh -i k8s-cluster-from-ground-up.id_rsa ubuntu@${master_1_ip}
 
 **For Master node 2**
 ```
-master_2_ip=$(aws ec2 describe-instances \
+master_2_ip=$(
+aws ec2 describe-instances \
 --filters "Name=tag:Name,Values=${NAME}-master-1" \
 --output text --query 'Reservations[].Instances[].PublicIpAddress')
 ssh -i k8s-cluster-from-ground-up.id_rsa ubuntu@${master_2_ip}
@@ -821,8 +833,10 @@ master_3_ip=$(aws ec2 describe-instances \
 --output text --query 'Reservations[].Instances[].PublicIpAddress')
 ssh -i k8s-cluster-from-ground-up.id_rsa ubuntu@${master_3_ip}
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/35.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/36.png)
 
-- Downloading and installing etcd
+- Downloading and installing **etcd**
 ```
 wget -q --show-progress --https-only --timestamping \
   "https://github.com/etcd-io/etcd/releases/download/v3.4.15/etcd-v3.4.15-linux-amd64.tar.gz"
