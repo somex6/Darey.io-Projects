@@ -835,6 +835,7 @@ ssh -i k8s-cluster-from-ground-up.id_rsa ubuntu@${master_3_ip}
 ```
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/35.png)
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/36.png)
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/37.png)
 
 - Downloading and installing **etcd**
 ```
@@ -848,6 +849,8 @@ tar -xvf etcd-v3.4.15-linux-amd64.tar.gz
 sudo mv etcd-v3.4.15-linux-amd64/etcd* /usr/local/bin/
 }
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/38.png)
+
 - Configuring the etcd server
 ```
 {
@@ -856,6 +859,8 @@ sudo mv etcd-v3.4.15-linux-amd64/etcd* /usr/local/bin/
   sudo cp ca.pem master-kubernetes-key.pem master-kubernetes.pem /etc/etcd/
 }
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/40.png)
+
 - The instance internal IP address will be used to serve client requests and communicate with etcd cluster peers. Retrieving the internal IP address for the current compute instance:
 ```
 export INTERNAL_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
@@ -867,7 +872,9 @@ ETCD_NAME=$(curl -s http://169.254.169.254/latest/user-data/ \
 
 echo ${ETCD_NAME}
 ```
-- Creating the etcd.service systemd unit file:
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/41.png)
+
+- Creating the **etcd.service** systemd unit file:
 ```
 cat <<EOF | sudo tee /etc/systemd/system/etcd.service
 [Unit]
@@ -901,6 +908,8 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/42.png)
+
 - Starting and enabling the etcd Server
 ```
 {
@@ -909,6 +918,8 @@ sudo systemctl enable etcd
 sudo systemctl start etcd
 }
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/43.png)
+
 - Verifying the etcd installation
 ```
 sudo ETCDCTL_API=3 etcdctl member list \
@@ -917,7 +928,10 @@ sudo ETCDCTL_API=3 etcdctl member list \
   --cert=/etc/etcd/master-kubernetes.pem \
   --key=/etc/etcd/master-kubernetes-key.pem
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/44.png)
+
 - Checking the etcd service status:`$ systemctl status etcd`
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/45.png)
 
 ## STEP 9: Configuring The Components For The Control Plane On The Master/Controller Nodes
 
@@ -930,6 +944,8 @@ wget -q --show-progress --https-only --timestamping \
 "https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kube-scheduler" \
 "https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl"
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/46.png)
+
 - Installing the Kubernetes binaries:
 ```
 {
@@ -947,6 +963,8 @@ service-account-key.pem service-account.pem \
 encryption-config.yaml /var/lib/kubernetes/
 }
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/47.png)
+
 - The instance internal IP address will be used to advertise the API Server to members of the cluster. Retrieving the internal IP address for the current compute instance:`$ export INTERNAL_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)`
 - Creating the kube-apiserver.service systemd unit file:
 ```
@@ -993,6 +1011,8 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/48.png)
+
 - Moving the kube-controller-manager kubeconfig into place:`$ sudo mv kube-controller-manager.kubeconfig /var/lib/kubernetes/`
 - Exporting some variables to retrieve the vpc_cidr which will be required for the bind-address flag:
 ```
@@ -1001,6 +1021,8 @@ export EC2_MAC_ADDRESS=$(curl -s $AWS_METADATA/network/interfaces/macs/ | head -
 export VPC_CIDR=$(curl -s $AWS_METADATA/network/interfaces/macs/$EC2_MAC_ADDRESS/vpc-ipv4-cidr-block/)
 export NAME=k8s-cluster-from-ground-up
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/49.png)
+
 - Creating the kube-controller-manager.service systemd unit file:
 ```
 cat <<EOF | sudo tee /etc/systemd/system/kube-controller-manager.service
@@ -1031,6 +1053,8 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/50.png)
+
 - Moving the kube-scheduler kubeconfig into place:
 ```
 sudo mv kube-scheduler.kubeconfig /var/lib/kubernetes/
@@ -1047,6 +1071,8 @@ leaderElection:
   leaderElect: true
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/51.png)
+
 - Creating the kube-scheduler.service systemd unit file:
 ```
 cat <<EOF | sudo tee /etc/systemd/system/kube-scheduler.service
@@ -1065,6 +1091,8 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/52.png)
+
 - Starting the Controller Services
 ```
 {
@@ -1073,6 +1101,8 @@ sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler
 sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
 }
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/53.png)
+
 - Checking the status of the services
 ```
 {
@@ -1081,12 +1111,21 @@ sudo systemctl status kube-controller-manager
 sudo systemctl status kube-scheduler
 }
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/54.png)
 
 ## STEP 10: Testing that Everything is working fine
 - To get the cluster details run:`$ kubectl cluster-info  --kubeconfig admin.kubeconfig`
 - To get the current namespaces:`$ kubectl get namespaces --kubeconfig admin.kubeconfig`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/55.png)
+
 - To reach the Kubernetes API Server publicly:`$ curl --cacert /var/lib/kubernetes/ca.pem https://$INTERNAL_IP:6443/version`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/56.png)
+
 - To get the status of each component:`$ kubectl get componentstatuses --kubeconfig admin.kubeconfig`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/57.png)
 
 ## STEP 11: Configuring Role Based Access Control
 - Configuring Role Based Access Control (RBAC) on one of the controller(master) nodes so that the api-server has necessary authorization for for the kubelet.
@@ -1115,6 +1154,8 @@ rules:
       - "*"
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/58.png)
+
 - Creating the **ClusterRoleBinding** to bind the kubernetes user with the role created above
 ```
 cat <<EOF | kubectl --kubeconfig admin.kubeconfig  apply -f -
@@ -1133,6 +1174,8 @@ subjects:
     name: kubernetes
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/59.png)
+
 - The **RBAC** permissions is configured to allow the Kubernetes API Server to access the Kubelet API on each worker nodes. Creating the system:kube-apiserver-to-kubelet ClusterRole with permissions to access the Kubelet API and perform most common tasks associated with managing pods on the worker nodes:
 ```
 cat <<EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
@@ -1157,6 +1200,8 @@ rules:
       - "*"
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/60.png)
+
 - Binding the system:kube-apiserver-to-kubelet ClusterRole to the kubernetes user so that API server can authenticate successfully to the kubelets on the worker nodes:
 ```
 cat <<EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
@@ -1175,6 +1220,7 @@ subjects:
     name: kubernetes
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/61.png)
 
 ## STEP 12: Bootstraping components on the worker nodes
 
@@ -1201,6 +1247,7 @@ worker_3_ip=$(aws ec2 describe-instances \
 --output text --query 'Reservations[].Instances[].PublicIpAddress')
 ssh -i k8s-cluster-from-ground-up.id_rsa ubuntu@${worker_3_ip}
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/62.png)
 
 - Installing OS dependencies:
 ```
@@ -1209,6 +1256,8 @@ ssh -i k8s-cluster-from-ground-up.id_rsa ubuntu@${worker_3_ip}
   sudo apt-get -y install socat conntrack ipset
 }
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/63.png)
+
 - Disabling Swap:`$ sudo swapoff -a`
 - Downloading and installing binaries of runc, cri-ctl and container runtime (Containerd)
 ```
@@ -1216,6 +1265,8 @@ ssh -i k8s-cluster-from-ground-up.id_rsa ubuntu@${worker_3_ip}
   https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.21.0/crictl-v1.21.0-linux-amd64.tar.gz \
   https://github.com/containerd/containerd/releases/download/v1.4.4/containerd-1.4.4-linux-amd64.tar.gz 
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/64.png)
+
 - Configuring the containerd
 ```
 {
@@ -1229,6 +1280,9 @@ ssh -i k8s-cluster-from-ground-up.id_rsa ubuntu@${worker_3_ip}
 }
 ```
 - Creating containerd directory:`$ sudo mkdir -p /etc/containerd/`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/65.png)
+
 - Inserting the following in it
 ```
 cat << EOF | sudo tee /etc/containerd/config.toml
@@ -1241,6 +1295,8 @@ cat << EOF | sudo tee /etc/containerd/config.toml
       runtime_root = ""
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/66.png)
+
 - Creating the containerd.service systemd unit file:
 ```
 cat << EOF | sudo tee /etc/systemd/system/containerd.service
@@ -1265,6 +1321,8 @@ LimitCORE=infinity
 WantedBy=multi-user.target
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/67.png)
+
 - Creating directories to configure kubelet, kube-proxy, cni, and a directory to keep the kubernetes root ca file:
 ```
 sudo mkdir -p \
@@ -1280,6 +1338,8 @@ sudo mkdir -p \
 wget -q --show-progress --https-only --timestamping \
   https://github.com/containernetworking/plugins/releases/download/v0.9.1/cni-plugins-linux-amd64-v0.9.1.tgz
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/68.png)
+
 - Installing CNI into **/opt/cni/bin/**:`$ sudo tar -xvf cni-plugins-linux-amd64-v0.9.1.tgz -C /opt/cni/bin/`
 - Downloading binaries for **kubectl, kube-proxy, and kubelet**
 ```
@@ -1295,6 +1355,8 @@ wget -q --show-progress --https-only --timestamping \
   sudo mv  kubectl kube-proxy kubelet /usr/local/bin/
 }
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/69.png)
+
 ## STEP 13: Configuring The Worker Nodes Components
 
 **Configuring the network**
@@ -1324,6 +1386,8 @@ cat > 172-20-bridge.conf <<EOF
 }
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/70.png)
+
 - Configuring the loopback network:
 ```
 cat > 99-loopback.conf <<EOF
@@ -1341,6 +1405,8 @@ WORKER_NAME=${NAME}-$(curl -s http://169.254.169.254/latest/user-data/ \
   | tr "|" "\n" | grep "^name" | cut -d"=" -f2)
 echo "${WORKER_NAME}"
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/71.png)
+
 - Moving the certificates and kubeconfig file to their respective configuration directories:
 ```
 sudo mv ${WORKER_NAME}-key.pem ${WORKER_NAME}.pem /var/lib/kubelet/
@@ -1357,6 +1423,7 @@ WORKER_NAME=${NAME}-$(curl -s http://169.254.169.254/latest/user-data/ \
   | tr "|" "\n" | grep "^name" | cut -d"=" -f2)
 echo "${WORKER_NAME}"
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/72.png)
 
 Creating the kubelet-config.yaml file
 
@@ -1382,6 +1449,8 @@ tlsCertFile: "/var/lib/kubelet/${WORKER_NAME}.pem"
 tlsPrivateKeyFile: "/var/lib/kubelet/${WORKER_NAME}-key.pem"
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/74.png)
+
 - Configuring the kubelet systemd service:
 ```
 cat <<EOF | sudo tee /etc/systemd/system/kubelet.service
