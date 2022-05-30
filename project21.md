@@ -1476,8 +1476,11 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/75.png)
+
 - Creating the kube-proxy.yaml file:
 ```
+cat <<EOF | sudo tee /var/lib/kube-proxy/kube-proxy-config.yaml
 kind: KubeProxyConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
@@ -1486,6 +1489,8 @@ mode: "iptables"
 clusterCIDR: "172.31.0.0/16"
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/76.png)
+
 - Configuring the Kube Proxy systemd service:
 ```
 cat <<EOF | sudo tee /etc/systemd/system/kube-proxy.service
@@ -1501,6 +1506,8 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/77.png)
+
 - Reloading configurations and starting both services:
 ```
 {
@@ -1509,6 +1516,11 @@ EOF
   sudo systemctl start containerd kubelet kube-proxy
 }
 ```
+- Downloading and applying weave net to make the nodes ready:`$ wget "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" -O weave.yaml
+kubectl apply -f weave.yaml`
 
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/making%20the%20nodes%20ready.png)
 
+- Checking the readiness of the worker nodes on all master nodes:`$ kubectl get nodes --kubeconfig admin.kubeconfig -o wide`
 
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/Nodes%20ready.png)
