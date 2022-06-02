@@ -152,7 +152,7 @@ aws ec2 authorize-security-group-ingress \
 aws ec2 authorize-security-group-ingress \
     --group-id ${SECURITY_GROUP_ID} \
     --ip-permissions IpProtocol=tcp,FromPort=30000,ToPort=32767,IpRanges='[{CidrIp=172.31.0.0/24}]'
-    
+ ```
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/10.png)
 
 # Create inbound traffic to allow connections to the Kubernetes API Server listening on port 6443
