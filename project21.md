@@ -152,9 +152,6 @@ aws ec2 authorize-security-group-ingress \
 aws ec2 authorize-security-group-ingress \
     --group-id ${SECURITY_GROUP_ID} \
     --ip-permissions IpProtocol=tcp,FromPort=30000,ToPort=32767,IpRanges='[{CidrIp=172.31.0.0/24}]'
- ```
-![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/10.png)
-
 # Create inbound traffic to allow connections to the Kubernetes API Server listening on port 6443
 aws ec2 authorize-security-group-ingress \
   --group-id ${SECURITY_GROUP_ID} \
@@ -168,7 +165,6 @@ aws ec2 authorize-security-group-ingress \
   --protocol tcp \
   --port 22 \
   --cidr 0.0.0.0/0
-![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/6.png)
 
 # Create ICMP ingress for all types
 aws ec2 authorize-security-group-ingress \
@@ -177,6 +173,10 @@ aws ec2 authorize-security-group-ingress \
   --port -1 \
   --cidr 0.0.0.0/0
   ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/10.png)
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/6.png)
+ 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/7.png)
 
 - Creating a network Load balancer:
