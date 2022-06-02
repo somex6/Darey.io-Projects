@@ -1516,11 +1516,6 @@ EOF
   sudo systemctl start containerd kubelet kube-proxy
 }
 ```
-- Downloading and applying weave net to make the nodes ready:`$ wget "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" -O weave.yaml
-kubectl apply -f weave.yaml`
-
-![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/making%20the%20nodes%20ready.png)
-
 - Checking the readiness of the worker nodes on all master nodes:`$ kubectl get nodes --kubeconfig admin.kubeconfig -o wide`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project21/Nodes%20ready.png)
