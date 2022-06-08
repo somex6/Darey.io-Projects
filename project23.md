@@ -35,14 +35,27 @@ spec:
         - containerPort: 80
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/11-creating%20nginx%20deploy%20file.png)
+
 - Verifying that the pod is running: `$ kubectl get pod`
-- Checking the logs of the pod:`kubectl logs ......`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/12-creating%20nginx%20deployment.png)
+
 - Exec into the pod and navigating to the nginx configuration file:
-- When creating a volume it must exists in the same region and availability zone as the EC2 instance running the pod. To confirm which node is running the pod:`kubectl get po .... -o wide`
-- To check the Availability Zone where the node is running:`kubectl describe node .......`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/13-exec%20into%20one%20of%20the%20pods.png)
+
+- When creating a volume it must exists in the same region and availability zone as the EC2 instance running the pod. To confirm which node is running the pod:`kubectl get po nginx-deployment-6fdcffd8fc-tbvfk -o wide`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/14-knowing%20the%20location%20of%20one%20of%20the%20pod.png)
+
+- To check the Availability Zone where the node is running:`kubectl describe node ip-10-0-8-60.us-west-1.compute.internal`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/15-locating%20the%20az%20of%20the%20node.png)
+
 - Creating a volume in the Elastic Block Storage section in AWS in the same AZ as the node running the nginx pod which will be used to mount volume into the Nginx pod.
 
-**Copying the Volume ID**
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/16-creating%20volume.png)
 
 - Updating the deployment configuration with the volume spec and volume mount:
 ```
@@ -76,8 +89,15 @@ spec:
           volumeID: "vol-07b537651bbe68be0"
           fsType: ext4
 ```
-- Exploring the pod:
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/17-persisting%20the%20nginx%20pod-2.png)
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/17-persisting%20the%20nginx%20pod.png)
+
 - But the problem with this configuration is that when we port forward the service and try to reach the endpoint, we will get a 403 error. This is because mounting a volume on a filesystem that already contains data will automatically erase all the existing data. To solve this issue is by implementing Persistent Volume(PV) and Persistent Volume claims(PVCs) resource.
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/18-creating%20nginx%20service.png)
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/18-nginx%20data%20removed.png)
 
 ## STEP 3: Managing Volumes Dynamically With PV and PVCs
 
@@ -98,7 +118,15 @@ apiVersion: v1
       storageClassName: gp2
 ```
 - Checking the setup:`$ kubectl get pvc`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/19-creating%20pvc.png)
+
 - Checking for the volume binding section:`$ kubectl describe storageclass gp2`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/20-troubleshooting-2.png)
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/20-troubleshooting.png)
+
 - The PVC created is in pending state because PV is not created yet. Editing the nginx-pod.yaml file to create the PV:
 ```
 apiVersion: apps/v1
@@ -132,6 +160,11 @@ spec:
 ```
 -  The '/tmp/somexdir' directory will be persisted, and any data written in there will be stored permanetly on the volume, which can be used by another Pod if the current one gets replaced.
 - Checking the dynamically created PV:`$ kubectl get pv`
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/21-creating%20pvc%20automatically.png)
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/22-pvc%20created%20in%20the%20console.png)
+
 - Another approach is creating a **volumeClaimTemplate** within the Pod spec of nginx-pod.yaml file so rather than having 2 manifest files, everything will be defined within a single manifest:
 ```
 apiVersion: apps/v1
@@ -156,7 +189,7 @@ spec:
         - containerPort: 80 
         volumeMounts:
         - name: nginx-volume
-          mountPath: "/tmp/somex"
+          mountPath: /tmp/somex
   volumeClaimTemplates:
   - metadata:
       name: mginx-volume
@@ -169,16 +202,21 @@ spec:
       storageClassName: standard
 ```
 
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/creating%20nginx-pod.png)
+
 ## STEP 4: Use Of ConfigMap As A Persistent Storage
 
 - ConfigMap is an API object used to store non-confidential data in key-value pairs. It is a way to manage configuration files and ensure they are not lost as a result of Pod replacement.
 - To demonstrate this, the HTML file that came with Nginx will be used.
 - Exec into the container and copying the HTML file:
 ```
-$ kubectl exec ..... -i -t -- bash
+$ kubectl exec nginx-deployment-6fdcffd8fc-77rfh -i -t -- bash
 
 $ cat /usr/share/nginx/html/index.html 
 ```
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/24-reconfiguring%20for%20configmap.png)
+
 - Creating the ConfigMap manifest file and customizing the HTML file and applying the change:
 ```
 cat <<EOF | tee ./nginx-configmap.yaml
@@ -214,6 +252,8 @@ data:
     </html>
 EOF
 ```
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/25-creating%20configmap%20file.png)
+
 - Updating the deployment file to use the configmap in the volumeMounts section
 ```
 apiVersion: apps/v1
@@ -250,6 +290,9 @@ spec:
             path: index.html
 ```
 - Now the **index.html** file is no longer ephemeral because it is using a configMap that has been mounted onto the filesystem. This is now evident when you exec into the pod and list the **/usr/share/nginx/html** directory
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/26-to%20show%20that%20configmap%20worked.png)
+
 - To see the configmap created:`$ kubectl get configmap`
 - To see the change in effect, updating the configmap manifest:`$ kubectl edit cm website-index-file`
 ```
@@ -277,6 +320,17 @@ spec:
     </body>
     </html>
 ```
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/editing%20the%20config%20map-1.png)
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/editing%20the%20configmap.png)
+
 - Without restarting the pod, the site should be loaded automatically.
+- Performing the Port forwarding command and accessing it through the browser:
+
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project23/accessing%20the%20browser%20to%20view%20the%20change.png)
 
 - To perform a restart:`$ kubectl rollout restart deploy nginx-deployment`
+
+
+
