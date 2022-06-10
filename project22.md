@@ -1,7 +1,7 @@
 # DEPLOYING APPLICATIONS INTO KUBERNETES CLUSTER
 ## INTRODUCTION
 
-This project demonstrates how containerised applications are deployed into pods in Kubernetes and how to access the application from the browser.
+This project demonstrates how containerised applications are deployed as pods in Kubernetes and how to access the application from the browser.
 
 ## STEP 1: Creating A Pod For The Nginx Application
 
@@ -116,7 +116,7 @@ spec:
         ports:
         - containerPort: 80
 ```
-
+- Creating Service manifest file for the tooling aplication called **tooling-service.yaml** and applying it
 ```
 apiVersion: v1
 kind: Service
@@ -130,7 +130,7 @@ spec:
       port: 80 # This is the port the Loadbalancer is listening at
       targetPort: 80
 ```
-
+- Creating Service manifest file for the MySQL database application called **mysql-service.yaml** and applying it
 ```
 apiVersion: v1
 kind: Service
@@ -144,6 +144,7 @@ spec:
       port: 3306 # This is the port the Loadbalancer is listening at
       targetPort: 3306
  ```
+- Creating deployment manifest file for the MySQL database application called **mysql-deploy.yaml** and applying it
  
  ```
  apiVersion: apps/v1
@@ -177,7 +178,8 @@ spec:
         ports:
         - containerPort: 3306
   ```
-- 
+- Accessing the application from the browser by port forwarding the service:
+
 ## STEP 5: Creating A Replica Set
 - The replicaSet object helps to maintain a stable set of Pod replicas running at any given time to achieve availability in case one or two pods dies.
 - Deleting the nginx-pod:`kubectl delete pod nginx-pod`
