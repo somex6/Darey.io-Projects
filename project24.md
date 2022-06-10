@@ -1,13 +1,13 @@
 # BUILDING ELASTIC KUBERNETES SERVICE (EKS) WITH TERRAFORM
 ## INTRODUCTION
 
-In this project, the Elastic Kubernates Service (EKS), which is a managed kubernetes service that takes care of the undifferential ... involved in setting up Kubernetes, is provisioned using **Terraform**. And further in the project, **Helm** which is a package manager for Kubernetes is used to deploy multiple applications.
+In this project, the Elastic Kubernates Service (EKS), which is a managed kubernetes service that takes care of undifferentiated heavy lifting involved in setting up Kubernetes, is provisioned using **Terraform**. And further in the project, **Helm** which is a package manager for Kubernetes is used to deploy multiple applications.
 
 The following outlines the steps;
 
 ## STEP 1: Configuring The Terraform Module For EKS
 
-- Creating AWS S3 buckect from a CLI to store the Terraform state:`$ aws s3api create-bucket --bucket eks-terraform-buck --region us-east-1`
+- Creating AWS S3 bucket from a CLI to store the Terraform state:`$ aws s3api create-bucket --bucket eks-terraform-buck --region us-east-1`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project24/11-creating%20s3%20bucket.png)
 
@@ -181,7 +181,7 @@ locals {
   }
 }
 ```
-- Creating the **variables.tf**:
+- Creating the **variables.tf** file:
 ```
 # create some variables
 variable "cluster_name" {
@@ -303,7 +303,7 @@ provider "kubernetes" {
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project24/14-error%20fixed.png)
 
-- Creating the **kubeconfig** file using awscli:`$ aws eks update-kubecofig --name tooling-app-eks --region <us-west-1> --kubeconfig kubeconfig`
+- Creating the **kubeconfig** file using awscli:`$ aws eks update-kubecofig --name tooling-app-eks --region us-west-1 --kubeconfig kubeconfig`
 
 ## STEP 2: Installing Helm From Script
 
@@ -362,18 +362,14 @@ provider "kubernetes" {
 
 ## STEP 4: Deploying Artifactory With Helm
 
-- Adding the Artifactory's repository to helm:`$ helm repo add .... `
+- Adding the Artifactory's repository to helm:`$ helm repo add https://charts.jfrog.io `
 - Updating helm repo:`$ helm repo update`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project24/25-adding%20jfrog%20repo%20and%20update.png)
 
-- Installing the chart:`$ helm install ...`
+- Installing the chart:`$ helm upgrade --install artifactory --namespace artifactory jfrog/artfactory`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project24/26-installing%20jfrog.png)
-
-- Inspecting the installation:
-- Port forwarding to access Artifactory from the UI:
-- Accessing the app from the browser:
 
 ## STEP 5: Deploying Hashicorp Vault With Helm
 
@@ -455,6 +451,4 @@ provider "kubernetes" {
 - Updating helm repo:`$ helm repo update`
 - Installing the chart:`$ helm install ...`
 
-- Inspecting the installation:
-- Port forwarding to access Artifactory from the UI:
-- Accessing the app from the browser:
+![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project24/39-installing%20elasticsearch.png)
