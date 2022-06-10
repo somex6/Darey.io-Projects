@@ -119,7 +119,7 @@ spec:
 
 ## STEP 3: Managing Volumes Dynamically With PV and PVCs
 
-- PVs are resources in the cluster. PVCs are requests for those resources and also act as claim checks to the resource.By default in EKS, there is a default storageClass configured as part of EKS installation which allow us to dynamically create a PV which will create a volume that a Pod
+- PVs are resources in the cluster. PVCs are requests for those resources and also act as claim checks to the resource.By default in EKS, there is a default storageClass configured as part of EKS installation which allow us to dynamically create a PV which will create a volume that a Pod will use.
 - Verifying that there is a storageClass in the cluster:`$ kubectl get storageclass`
 - Creating a manifest file for a PVC, and based on the gp2 storageClass a PV will be dynamically created:
 ```
