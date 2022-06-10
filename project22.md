@@ -1,6 +1,8 @@
 # DEPLOYING APPLICATIONS INTO KUBERNETES CLUSTER
 ## INTRODUCTION
 
+This project demonstrates how containerised applications are deployed into pods in Kubernetes and how to access the application from the browser.
+
 ## STEP 1: Creating A Pod For The Nginx Application
 
 - Creating nginx pod by applying the manifest file:`kubectl apply -f nginx-pod.yaml`
@@ -87,6 +89,95 @@ spec:
 
 ## STEP 4: Deploying Tooling Application With Kubernetes
 
+The tooling application that was containerised with Docker on Project 20, the following shows how the image is pulled deployed into Kubernetes:
+
+- Creating deployment manifest file for the tooling aplication called **tooling-deploy.yaml** and applying it:
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tooling-deployment
+  labels:
+    app: tooling-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tooling-app
+  template:
+    metadata:
+      labels:
+        app: tooling-app
+    spec:
+      containers:
+      - name: tooling
+        image: somex6/tooling:0.0.1
+        ports:
+        - containerPort: 80
+```
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: tooling-service
+spec:
+  selector:
+    app: tooling-app
+  ports:
+    - protocol: TCP
+      port: 80 # This is the port the Loadbalancer is listening at
+      targetPort: 80
+```
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  selector:
+    tier: mysql-db
+  ports:
+    - protocol: TCP
+      port: 3306 # This is the port the Loadbalancer is listening at
+      targetPort: 3306
+ ```
+ 
+ ```
+ apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  labels:
+    tier: mysql-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: mysql-db
+  template:
+    metadata:
+      labels:
+        tier: mysql-db
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        env:
+        - name: MYSQL_DATABASE
+          value: toolingdb
+        - name: MYSQL_USER
+          value: somex
+        - name: MYSQL_PASSWORD
+          value: password123
+        - name: MYSQL_ROOT_PASSWORD
+          value: password1234
+        ports:
+        - containerPort: 3306
+  ```
+- 
 ## STEP 5: Creating A Replica Set
 - The replicaSet object helps to maintain a stable set of Pod replicas running at any given time to achieve availability in case one or two pods dies.
 - Deleting the nginx-pod:`kubectl delete pod nginx-pod`
