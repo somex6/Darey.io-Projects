@@ -362,7 +362,7 @@ provider "kubernetes" {
 
 ## STEP 4: Deploying Artifactory With Helm
 
-- Adding the Artifactory's repository to helm:`$ helm repo add https://charts.jfrog.io `
+- Adding the Artifactory's repository to helm:`$ helm repo add jfrog https://charts.jfrog.io `
 - Updating helm repo:`$ helm repo update`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project24/25-adding%20jfrog%20repo%20and%20update.png)
