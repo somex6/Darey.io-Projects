@@ -367,7 +367,7 @@ provider "kubernetes" {
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project24/25-adding%20jfrog%20repo%20and%20update.png)
 
-- Installing the chart:`$ helm upgrade --install artifactory --namespace artifactory jfrog/artfactory`
+- Installing the chart:`$ helm upgrade --install artifactory --namespace artifactory jfrog/artifactory`
 
 ![](https://github.com/somex6/Darey.io-Projects/blob/main/img/project24/26-installing%20jfrog.png)
 
