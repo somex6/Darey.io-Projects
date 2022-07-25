@@ -51,3 +51,4 @@ This repository contains most of the real-life projects I carried out during my 
 **Project 23:**   [PERSISTING DATA IN KUBERNETES](https://github.com/somex6/Darey.io-Projects/blob/main/project23.md)
 
 **Project 24:**   [BUILDING ELASTIC KUBERNETES SERVICE (EKS) WITH TERRAFORM](https://github.com/somex6/Darey.io-Projects/blob/main/project24.md)
+**Aux Project:**  [ONBOARDING NEW LINUX USERS ONTO A SERVER WITH SHELL SCRIPT](https://github.com/somex6/Darey.io-Projects/blob/main/auxillary-projects.md)
